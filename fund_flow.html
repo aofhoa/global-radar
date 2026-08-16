@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>A股资金流向 | 2026-08-16 20:53</title>
+<title>A股资金流向 · 实时</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh;color:#1a1816;line-height:1.7;font-size:14px;background:#f4f1ec;overflow-x:hidden}
@@ -11,69 +11,77 @@ body{font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC"
 .bg-grain{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
 .glass{background:rgba(255,255,255,.55);backdrop-filter:blur(32px) saturate(1.3);-webkit-backdrop-filter:blur(32px) saturate(1.3);border:1px solid rgba(255,255,255,.6);border-radius:16px;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03)}
 .glass::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7) 30%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.7) 70%,transparent);pointer-events:none}
+.glass:hover{background:rgba(255,255,255,.6);box-shadow:0 2px 8px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.04)}
 .glass-strong{background:rgba(255,255,255,.65);backdrop-filter:blur(48px) saturate(1.4);-webkit-backdrop-filter:blur(48px) saturate(1.4);border:1px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 1px 4px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.04)}
 .glass-strong::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8) 25%,rgba(255,255,255,1) 50%,rgba(255,255,255,.8) 75%,transparent);pointer-events:none}
 .wrap{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 28px 60px}
+
+/* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:24px 28px;margin-bottom:24px;flex-wrap:wrap;gap:16px}
 .hdr-left h1{font-size:1.4em;font-weight:300;color:#1a1816;letter-spacing:2px;text-transform:uppercase}
 .hdr-left h1 strong{font-weight:600;letter-spacing:0}
-.hdr-left .sub{color:#5a5550;font-size:.82em;margin-top:4px;font-weight:300;letter-spacing:.5px}
-.hdr-right{display:flex;gap:24px;align-items:center}
+.hdr-left .sub{color:#5a5550;font-size:.82em;margin-top:4px;font-weight:300}
+.hdr-right{display:flex;gap:20px;align-items:center}
 .hdr-stat{text-align:center}
-.hdr-stat .val{font-size:1.5em;font-weight:200;line-height:1.2;letter-spacing:-.5px}
-.hdr-stat .lbl{font-size:.65em;color:#6a6560;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+.hdr-stat .val{font-size:1.5em;font-weight:200;line-height:1.2}
+.hdr-stat .lbl{font-size:.62em;color:#6a6560;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+
+/* Live indicator */
+.live{display:flex;align-items:center;gap:6px;font-size:.78em;color:#6a6560}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#b47355;animation:pulse 2s ease-in-out infinite}
+.live-dot.closed{background:#9a917e;animation:none}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.countdown{font-variant-numeric:tabular-nums;font-weight:500;color:#8a7e72;min-width:28px;text-align:center}
+
 .divider{height:1px;border:none;background:linear-gradient(90deg,transparent,rgba(0,0,0,.08) 20%,rgba(0,0,0,.08) 80%,transparent);margin:0 0 24px}
-.nav-bar{position:sticky;top:0;z-index:50;display:flex;gap:4px;padding:6px 8px;background:rgba(244,241,236,.8);backdrop-filter:blur(24px) saturate(1.3);border-bottom:1px solid rgba(255,255,255,.4);margin:-20px -28px 24px}
+
+/* Nav */
+.nav-bar{position:sticky;top:0;z-index:50;display:flex;gap:4px;padding:6px 8px;background:rgba(244,241,236,.85);backdrop-filter:blur(24px) saturate(1.3);border-bottom:1px solid rgba(255,255,255,.4);margin:-20px -28px 24px}
 .nav-link{padding:6px 14px;border-radius:8px;border:none;background:transparent;color:#7a7570;font-size:.78em;font-weight:500;cursor:pointer;transition:all .25s;font-family:inherit;letter-spacing:.3px}
 .nav-link:hover{color:#3a3632;background:rgba(255,255,255,.4)}
 .nav-link.active{color:#1a1816;background:rgba(255,255,255,.5)}
-.sec{margin-bottom:28px}
-.sec-title{font-size:.75em;font-weight:500;color:#6a6560;margin-bottom:14px;text-transform:uppercase;letter-spacing:3px;display:flex;align-items:center;gap:10px}
-.sec-title .badge{font-size:.8em;padding:2px 10px;border-radius:10px;font-weight:400;background:rgba(0,0,0,.04);color:#6a6560;letter-spacing:1px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
 
-/* ── Summary Cards ───────────────────────── */
+/* Summary */
 .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
 .sum-card{padding:22px}
-.sum-card .sc-label{font-size:.65em;color:#6a6560;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px;font-weight:500}
-.sum-card .sc-value{font-size:2em;font-weight:200;line-height:1;letter-spacing:-1px}
+.sum-card .sc-label{font-size:.62em;color:#6a6560;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px;font-weight:500}
+.sum-card .sc-value{font-size:1.8em;font-weight:200;line-height:1.1;letter-spacing:-.5px}
 .sum-card .sc-sub{font-size:.8em;color:#5a5550;margin-top:8px;font-weight:300;line-height:1.6}
 
-/* ── Tables ──────────────────────────────── */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:.88em}
-thead th{
-  padding:10px 12px;text-align:right;font-size:.7em;font-weight:500;
-  color:#8a8279;text-transform:uppercase;letter-spacing:1.5px;
-  border-bottom:1px solid rgba(0,0,0,.06);
-  position:sticky;top:0;background:rgba(255,255,255,.8);
-  backdrop-filter:blur(8px);
-}
-thead th:first-child{text-align:center}
-thead th:nth-child(2){text-align:left}
-tbody tr{border-bottom:1px solid rgba(0,0,0,.03);transition:background .2s}
-tbody tr:hover{background:rgba(255,255,255,.3)}
-tbody td{padding:10px 12px;text-align:right;vertical-align:middle}
-tbody td:first-child{text-align:center}
-tbody td:nth-child(2){text-align:left}
-
-/* ── Filter Tabs ─────────────────────────── */
+/* Tabs */
 .filter-bar{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,.3);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.5);border-radius:12px;padding:4px;width:fit-content}
 .filter-btn{padding:7px 18px;border-radius:9px;border:none;background:transparent;color:#7a7570;font-size:.8em;font-weight:500;cursor:pointer;transition:all .3s;font-family:inherit;letter-spacing:.5px}
 .filter-btn:hover{color:#3a3632;background:rgba(255,255,255,.4)}
 .filter-btn.active{background:rgba(255,255,255,.7);color:#1a1816;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .tab-content{display:none}.tab-content.visible{display:block}
 
-/* ── Back to Top ─────────────────────────── */
+/* Tables */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+.sec{margin-bottom:24px}
+.sec-title{font-size:.72em;font-weight:500;color:#6a6560;margin-bottom:12px;text-transform:uppercase;letter-spacing:3px;display:flex;align-items:center;gap:10px}
+.sec-title .badge{font-size:.8em;padding:2px 10px;border-radius:10px;background:rgba(0,0,0,.04);color:#6a6560;letter-spacing:1px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.86em}
+thead th{padding:9px 10px;text-align:right;font-size:.68em;font-weight:500;color:#8a8279;text-transform:uppercase;letter-spacing:1.5px;border-bottom:1px solid rgba(0,0,0,.06);position:sticky;top:0;background:rgba(255,255,255,.85);backdrop-filter:blur(8px)}
+thead th:first-child{text-align:center}thead th:nth-child(2){text-align:left}
+tbody tr{border-bottom:1px solid rgba(0,0,0,.03);transition:background .2s}
+tbody tr:hover{background:rgba(255,255,255,.3)}
+tbody td{padding:9px 10px;text-align:right;vertical-align:middle}
+tbody td:first-child{text-align:center}tbody td:nth-child(2){text-align:left}
+
+/* Loading */
+.loading{text-align:center;padding:40px;color:#a09890;font-size:.9em}
+.loading .spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(0,0,0,.08);border-top-color:#8a7e72;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Back to top */
 .to-top{position:fixed;bottom:24px;right:24px;z-index:100;width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.6);box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
 .to-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
-.to-top:hover{background:rgba(255,255,255,.8)}
 .to-top svg{width:16px;height:16px;fill:none;stroke:#5a524a;stroke-width:2;stroke-linecap:round}
 
-.ftr{text-align:center;padding:32px 0 0;color:#7a7570;font-size:.78em;letter-spacing:.5px;margin-top:40px}
-.ftr .disclaimer{padding:16px 20px;border-radius:14px;margin-bottom:16px;font-size:.8em;color:#5a5550;line-height:1.7;font-weight:300;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(16px)}
+.ftr{text-align:center;padding:32px 0 0;color:#7a7570;font-size:.76em;letter-spacing:.5px;margin-top:40px}
+.ftr .disclaimer{padding:14px 18px;border-radius:14px;margin-bottom:14px;font-size:.8em;color:#5a5550;line-height:1.7;font-weight:300;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(16px)}
 </style>
 </head>
 <body>
@@ -85,41 +93,42 @@ tbody td:nth-child(2){text-align:left}
 <div class="hdr glass-strong">
   <div class="hdr-left">
     <h1>资金 <strong>流向</strong></h1>
-    <div class="sub">A股实时资金流向监控 &nbsp;&middot;&nbsp; 2026-08-16 20:53</div>
+    <div class="sub">A股实时资金流向监控</div>
   </div>
   <div class="hdr-right">
-    <div class="hdr-stat"><div class="val" style="color:#b47355">50</div><div class="lbl">行业</div></div>
-    <div class="hdr-stat"><div class="val" style="color:#8a7e72">50</div><div class="lbl">概念</div></div>
-    <div class="hdr-stat"><div class="val" style="color:#6a6560">50</div><div class="lbl">个股</div></div>
+    <div class="live"><div class="live-dot" id="liveDot"></div><span id="marketStatus">检测中</span></div>
+    <div class="countdown" id="countdown" title="下次刷新">--</div>
+    <div class="hdr-stat"><div class="val" id="indCount">—</div><div class="lbl">行业</div></div>
+    <div class="hdr-stat"><div class="val" id="conCount">—</div><div class="lbl">概念</div></div>
+    <div class="hdr-stat"><div class="val" id="stkCount">—</div><div class="lbl">个股</div></div>
   </div>
 </div>
-
 <hr class="divider">
 
-<!-- Sticky Nav -->
+<!-- Nav -->
 <div class="nav-bar">
-  <button class="nav-link active" onclick="navTo('overview')">概览</button>
-  <button class="nav-link" onclick="navTo('industry')">行业板块</button>
-  <button class="nav-link" onclick="navTo('concept')">概念板块</button>
-  <button class="nav-link" onclick="navTo('stock')">个股</button>
+  <button class="nav-link active" onclick="navTo('overview',this)">概览</button>
+  <button class="nav-link" onclick="navTo('industry',this)">行业板块</button>
+  <button class="nav-link" onclick="navTo('concept',this)">概念板块</button>
+  <button class="nav-link" onclick="navTo('stock',this)">个股</button>
 </div>
 
-<!-- Summary Cards -->
+<!-- Summary -->
 <div class="summary-grid" id="overview">
   <div class="sum-card glass">
-    <div class="sc-label">行业净流入 TOP</div>
-    <div class="sc-value" style="color:#b47355">电子、半导体、公用事业</div>
-    <div class="sc-sub">主力净流入排名前三的行业板块</div>
+    <div class="sc-label">行业净流入 TOP3</div>
+    <div class="sc-value" id="topInflow" style="color:#b47355">—</div>
+    <div class="sc-sub" id="topInflowDetail">加载中...</div>
   </div>
   <div class="sum-card glass">
-    <div class="sc-label">行业净流出 TOP</div>
-    <div class="sc-value" style="color:#6b8f71">通信、通信设备、通信线缆及配套</div>
-    <div class="sc-sub">主力净流出排名前三的行业板块</div>
+    <div class="sc-label">行业净流出 TOP3</div>
+    <div class="sc-value" id="topOutflow" style="color:#6b8f71">—</div>
+    <div class="sc-sub" id="topOutflowDetail">加载中...</div>
   </div>
   <div class="sum-card glass">
-    <div class="sc-label">资金面概况</div>
-    <div class="sc-value" style="color:#6b8f71">中性</div>
-    <div class="sc-sub">流入 -616.0亿 / 流出 551.9亿<br>净流入 -64.1亿</div>
+    <div class="sc-label">更新时间</div>
+    <div class="sc-value" id="updateTime" style="font-size:1.4em;color:#8a7e72">—</div>
+    <div class="sc-sub" id="refreshInfo">每60秒自动刷新</div>
   </div>
 </div>
 
@@ -131,2387 +140,248 @@ tbody td:nth-child(2){text-align:left}
 </div>
 
 <!-- Industry Tab -->
-<div class="tab-content visible" id="industry" data-tab="industry">
+<div class="tab-content visible" id="tab-industry" data-tab="industry">
   <div class="grid-2">
     <div class="sec">
       <div class="sec-title">主力净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>板块</th><th>最新</th><th>涨跌%</th><th>主力净流入</th><th>净占比</th><th>超大单</th><th>大单</th><th>领涨股</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">电子</div>
-            <div style="font-size:.7em;color:#a09890">BK1201</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">13183.76</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.78%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-64.70亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.14%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-19.17亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-45.53亿</td>
-          <td style='font-size:.8em;color:#a09890'>长鑫科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">半导体</div>
-            <div style="font-size:.7em;color:#a09890">BK1036</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2808.05</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.80%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-61.25亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.15%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-29.82亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-31.43亿</td>
-          <td style='font-size:.8em;color:#a09890'>长鑫科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">公用事业</div>
-            <div style="font-size:.7em;color:#a09890">BK0427</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">9441.52</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-2.30%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-49.47亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:98.94972608%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-8.63%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-31.73亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-17.74亿</td>
-          <td style='font-size:.8em;color:#a09890'>长江电力</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">电力</div>
-            <div style="font-size:.7em;color:#a09890">BK0428</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">19390.30</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-2.65%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-46.20亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:92.39757312%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-8.74%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-29.65亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-16.55亿</td>
-          <td style='font-size:.8em;color:#a09890'>长江电力</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">医药生物</div>
-            <div style="font-size:.7em;color:#a09890">BK1216</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4814.94</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.21%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-40.38亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:80.75416576%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.35%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-17.51亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-22.87亿</td>
-          <td style='font-size:.8em;color:#a09890'>哈药股份</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">火力发电</div>
-            <div style="font-size:.7em;color:#a09890">BK1377</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2460.59</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-3.31%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-35.19亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:70.3854224%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-13.47%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-21.69亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-13.50亿</td>
-          <td style='font-size:.8em;color:#a09890'>国电电力</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">非银金融</div>
-            <div style="font-size:.7em;color:#a09890">BK1203</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2393.74</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.22%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-34.68亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:69.36507168%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-9.74%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-24.15亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-10.53亿</td>
-          <td style='font-size:.8em;color:#a09890'>太平洋</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">证券Ⅱ</div>
-            <div style="font-size:.7em;color:#a09890">BK0473</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">138925.41</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.31%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-30.65亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:61.29927552%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-12.23%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-21.54亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.11亿</td>
-          <td style='font-size:.8em;color:#a09890'>太平洋</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">证券Ⅲ</div>
-            <div style="font-size:.7em;color:#a09890">BK1366</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">138925.41</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.31%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-30.65亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:61.29927552%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-12.23%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-21.54亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.11亿</td>
-          <td style='font-size:.8em;color:#a09890'>太平洋</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">半导体设备</div>
-            <div style="font-size:.7em;color:#a09890">BK1326</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">51706.00</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.84%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-28.25亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:56.50780672%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-6.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8.49亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-19.77亿</td>
-          <td style='font-size:.8em;color:#a09890'>微导纳米</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">传媒</div>
-            <div style="font-size:.7em;color:#a09890">BK0486</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">9694.19</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.01%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-24.83亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:49.65905408%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.05%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-12.83亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-12.00亿</td>
-          <td style='font-size:.8em;color:#a09890'>智度股份</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">化学制药</div>
-            <div style="font-size:.7em;color:#a09890">BK0465</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">37450.71</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.40%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-23.85亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:47.69521152%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.16%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-12.65亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-11.19亿</td>
-          <td style='font-size:.8em;color:#a09890'>哈药股份</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">基础化工</div>
-            <div style="font-size:.7em;color:#a09890">BK1206</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3569.59</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.34%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-20.93亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:41.86937856%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.18%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.33亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-11.61亿</td>
-          <td style='font-size:.8em;color:#a09890'>瑞丰高材</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">医疗服务</div>
-            <div style="font-size:.7em;color:#a09890">BK0727</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1562.26</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.27%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-20.82亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:41.6480512%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.65%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-10.95亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.88亿</td>
-          <td style='font-size:.8em;color:#a09890'>博济医药</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">化学制剂</div>
-            <div style="font-size:.7em;color:#a09890">BK1594</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4029.42</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.19%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-20.44亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:40.87087232%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.41%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-10.79亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.64亿</td>
-          <td style='font-size:.8em;color:#a09890'>哈药股份</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">医疗研发外包</div>
-            <div style="font-size:.7em;color:#a09890">BK1600</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">9592.28</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.27%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-17.06亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:34.11391456%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.80%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.75亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7.30亿</td>
-          <td style='font-size:.8em;color:#a09890'>博济医药</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">计算机设备</div>
-            <div style="font-size:.7em;color:#a09890">BK0735</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1603.73</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.31%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-16.90亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:33.79940672%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.98%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-12.10亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.80亿</td>
-          <td style='font-size:.8em;color:#a09890'>恒为科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">广告营销</div>
-            <div style="font-size:.7em;color:#a09890">BK1220</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4749.20</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.44%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-16.78亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:33.5614896%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.12%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8.15亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8.63亿</td>
-          <td style='font-size:.8em;color:#a09890'>智度股份</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">印制电路板</div>
-            <div style="font-size:.7em;color:#a09890">BK1340</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">11814.58</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.39%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-16.64亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:33.27215104%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.05%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.68亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-13.95亿</td>
-          <td style='font-size:.8em;color:#a09890'>华正新材</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">营销代理</div>
-            <div style="font-size:.7em;color:#a09890">BK1293</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4535.46</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.42%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-16.28亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:32.56176448%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.22%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8.56亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7.72亿</td>
-          <td style='font-size:.8em;color:#a09890'>智度股份</td>
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="ind-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
     <div class="sec">
       <div class="sec-title">主力净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>板块</th><th>最新</th><th>涨跌%</th><th>主力净流出</th><th>净占比</th><th>超大单</th><th>大单</th><th>领涨股</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信</div>
-            <div style="font-size:.7em;color:#a09890">BK1215</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">7736.89</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.06%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+139.07亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.86%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+122.23亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+16.84亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信设备</div>
-            <div style="font-size:.7em;color:#a09890">BK0448</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">23575.23</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.37%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+118.73亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.61%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+107.03亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+11.70亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信线缆及配套</div>
-            <div style="font-size:.7em;color:#a09890">BK1592</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">24355.33</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+5.33%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+55.04亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+9.70%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+49.80亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.24亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信网络设备及器件</div>
-            <div style="font-size:.7em;color:#a09890">BK1591</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">14643.61</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.27%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+48.01亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:96.02452992%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.70%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+40.49亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+7.52亿</td>
-          <td style='font-size:.8em;color:#a09890'>新易盛</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信服务</div>
-            <div style="font-size:.7em;color:#a09890">BK0736</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1098.42</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.32%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+20.34亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:40.67971168%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+8.81%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+15.20亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.14亿</td>
-          <td style='font-size:.8em;color:#a09890'>数据港</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信终端及配件</div>
-            <div style="font-size:.7em;color:#a09890">BK1593</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4022.66</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.90%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+15.81亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:31.612288%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+8.16%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+16.68亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8726万</td>
-          <td style='font-size:.8em;color:#a09890'>剑桥科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">稀土</div>
-            <div style="font-size:.7em;color:#a09890">BK1626</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">10383.28</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+5.82%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+14.94亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:29.88921664%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+10.97%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+12.77亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.18亿</td>
-          <td style='font-size:.8em;color:#a09890'>中国稀土</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">小金属</div>
-            <div style="font-size:.7em;color:#a09890">BK1027</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4063.36</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.02%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+14.38亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:28.75761664%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.28%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+14.00亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3829万</td>
-          <td style='font-size:.8em;color:#a09890'>中国稀土</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信应用增值服务</div>
-            <div style="font-size:.7em;color:#a09890">BK1589</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4805.27</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.36%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+13.62亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:27.23796256%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+9.43%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.28亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3428万</td>
-          <td style='font-size:.8em;color:#a09890'>数据港</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">调味发酵品Ⅲ</div>
-            <div style="font-size:.7em;color:#a09890">BK1576</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4839.84</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.11%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+12.58亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:25.15208288%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+21.26%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.83亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.25亿</td>
-          <td style='font-size:.8em;color:#a09890'>莲花控股</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">调味发酵品Ⅱ</div>
-            <div style="font-size:.7em;color:#a09890">BK1278</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4839.84</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.11%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+12.58亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:25.15208288%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+21.26%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.83亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.25亿</td>
-          <td style='font-size:.8em;color:#a09890'>莲花控股</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">消费电子零部件及组装</div>
-            <div style="font-size:.7em;color:#a09890">BK1338</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">13431.05</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.22%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+12.13亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:24.26658816%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.81%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+9.81亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.32亿</td>
-          <td style='font-size:.8em;color:#a09890'>协创数据</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">被动元件</div>
-            <div style="font-size:.7em;color:#a09890">BK1339</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">13339.18</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.40%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+11.76亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:23.5225344%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.40%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+9.26亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.50亿</td>
-          <td style='font-size:.8em;color:#a09890'>麦捷科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">消费电子</div>
-            <div style="font-size:.7em;color:#a09890">BK1037</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2056.76</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.95%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+11.41亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:22.829184%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.64%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+9.48亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+1.93亿</td>
-          <td style='font-size:.8em;color:#a09890'>协创数据</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">激光设备</div>
-            <div style="font-size:.7em;color:#a09890">BK1409</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">18508.82</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.44%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+11.09亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:22.18378368%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+7.77%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+6.37亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4.72亿</td>
-          <td style='font-size:.8em;color:#a09890'>大族激光</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">玻璃玻纤</div>
-            <div style="font-size:.7em;color:#a09890">BK0546</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">67075.43</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.55%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.31亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:16.61572352%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.14%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.47亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.16亿</td>
-          <td style='font-size:.8em;color:#a09890'>中国巨石</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">玻纤制造</div>
-            <div style="font-size:.7em;color:#a09890">BK1462</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">16639.12</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.52%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.27亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:16.5327712%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.20%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.34亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.07亿</td>
-          <td style='font-size:.8em;color:#a09890'>中国巨石</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">食品饮料</div>
-            <div style="font-size:.7em;color:#a09890">BK0438</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">26441.31</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.08%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.14亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:16.28189632%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+2.37%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.48亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.34亿</td>
-          <td style='font-size:.8em;color:#a09890'>莲花控股</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">IT服务Ⅲ</div>
-            <div style="font-size:.7em;color:#a09890">BK1444</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">8082.05</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.06%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+7.85亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:15.69593856%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.15%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+12.00亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.15亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">IT服务Ⅱ</div>
-            <div style="font-size:.7em;color:#a09890">BK1238</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">8082.05</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.06%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+7.85亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:15.69593856%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.15%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+12.00亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.15亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="ind-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
   </div>
 </div>
 
 <!-- Concept Tab -->
-<div class="tab-content" id="concept" data-tab="concept">
+<div class="tab-content" id="tab-concept" data-tab="concept">
   <div class="grid-2">
     <div class="sec">
       <div class="sec-title">概念净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>概念</th><th>最新</th><th>涨跌%</th><th>主力净流入</th><th>净占比</th><th>超大单</th><th>大单</th><th>领涨股</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">融资融券</div>
-            <div style="font-size:.7em;color:#a09890">BK0596</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3093.52</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.14%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-126.00亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-0.66%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.40亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-139.40亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">深股通</div>
-            <div style="font-size:.7em;color:#a09890">BK0804</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1233.64</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.22%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-93.59亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-0.90%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7.44亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-86.16亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">HS300_</div>
-            <div style="font-size:.7em;color:#a09890">BK0500</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">12173.23</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.12%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-86.77亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.58%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-50.58亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-36.19亿</td>
-          <td style='font-size:.8em;color:#a09890'>新易盛</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">大盘股</div>
-            <div style="font-size:.7em;color:#a09890">BK1663</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1000.20</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.06%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-83.37亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.26%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-28.02亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-55.35亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">深成500</div>
-            <div style="font-size:.7em;color:#a09890">BK0568</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1445.33</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.02%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-82.54亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.34%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-20.54亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-61.99亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">央国企改革</div>
-            <div style="font-size:.7em;color:#a09890">BK0683</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4763.94</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.39%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-78.77亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.46%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-24.57亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-54.19亿</td>
-          <td style='font-size:.8em;color:#a09890'>中国巨石</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">富时罗素</div>
-            <div style="font-size:.7em;color:#a09890">BK0867</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1778.44</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.24%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-78.06亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-0.79%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+9.19亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-87.25亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">标准普尔</div>
-            <div style="font-size:.7em;color:#a09890">BK0879</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1697.12</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.45%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-74.13亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.01%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-14.08亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-60.05亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">AH股</div>
-            <div style="font-size:.7em;color:#a09890">BK0499</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">9285.45</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.34%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-71.54亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.71%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-51.24亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-20.29亿</td>
-          <td style='font-size:.8em;color:#a09890'>剑桥科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中证500</div>
-            <div style="font-size:.7em;color:#a09890">BK0701</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2578.26</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.11%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-69.24亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-25.78亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-43.46亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">国产芯片</div>
-            <div style="font-size:.7em;color:#a09890">BK0891</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4836.61</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.17%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-68.35亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.60%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-37.54亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-30.81亿</td>
-          <td style='font-size:.8em;color:#a09890'>长鑫科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">MSCI中国</div>
-            <div style="font-size:.7em;color:#a09890">BK0821</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1486.78</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.09%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-68.28亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-0.74%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2852万</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-68.57亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">题材股</div>
-            <div style="font-size:.7em;color:#a09890">BK1717</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1348.92</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-2.22%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-67.58亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-4.77%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-36.13亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-31.44亿</td>
-          <td style='font-size:.8em;color:#a09890'>天孚通信</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">上证380</div>
-            <div style="font-size:.7em;color:#a09890">BK0705</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2937.28</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.28%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-66.28亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-3.05%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-33.41亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-32.87亿</td>
-          <td style='font-size:.8em;color:#a09890'>剑桥科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">周期股</div>
-            <div style="font-size:.7em;color:#a09890">BK1639</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">930.99</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.14%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-63.85亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-3.44%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-36.24亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-27.61亿</td>
-          <td style='font-size:.8em;color:#a09890'>中国巨石</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">深证100R</div>
-            <div style="font-size:.7em;color:#a09890">BK0743</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1333.85</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.07%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-57.38亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.29%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-21.09亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-36.30亿</td>
-          <td style='font-size:.8em;color:#a09890'>新易盛</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">绿色电力</div>
-            <div style="font-size:.7em;color:#a09890">BK1024</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1269.84</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.80%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-53.90亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.09%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-32.47亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-21.43亿</td>
-          <td style='font-size:.8em;color:#a09890'>长江电力</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">光伏概念</div>
-            <div style="font-size:.7em;color:#a09890">BK0588</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3985.53</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.10%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-51.05亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-2.67%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-20.11亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-30.94亿</td>
-          <td style='font-size:.8em;color:#a09890'>中天科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">茅指数</div>
-            <div style="font-size:.7em;color:#a09890">BK0999</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">725.54</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.71%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-50.42亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-5.62%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-28.36亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-22.06亿</td>
-          <td style='font-size:.8em;color:#a09890'>中芯国际</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">人工智能</div>
-            <div style="font-size:.7em;color:#a09890">BK0800</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1793.33</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.21%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-48.82亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:97.63645952%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-1.26%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-33.67亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-15.15亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="con-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
     <div class="sec">
       <div class="sec-title">概念净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>概念</th><th>最新</th><th>涨跌%</th><th>主力净流出</th><th>净占比</th><th>超大单</th><th>大单</th><th>领涨股</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">5G概念</div>
-            <div style="font-size:.7em;color:#a09890">BK0714</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2055.05</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.78%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+129.84亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.15%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+130.45亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-6109万</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">光通信模块</div>
-            <div style="font-size:.7em;color:#a09890">BK1136</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3850.36</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.93%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+128.00亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+5.50%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+121.70亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+6.30亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">通信技术</div>
-            <div style="font-size:.7em;color:#a09890">BK1650</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1048.08</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.81%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+119.48亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+2.47%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+129.03亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.55亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">CPO概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1128</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">8902.26</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.18%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+114.90亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.67%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+106.85亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+8.04亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">算力概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1134</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1958.94</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.06%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+93.80亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.48%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+70.46亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+23.34亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">液冷概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1138</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2079.62</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.89%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+83.58亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.05%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+71.33亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+12.25亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">一带一路</div>
-            <div style="font-size:.7em;color:#a09890">BK0712</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1532.95</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.16%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+77.63亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.81%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+78.38亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7508万</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">F5G概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1088</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4913.55</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.09%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+72.41亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+8.59%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+62.08亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+10.32亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">光纤概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1660</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1155.72</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.60%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+69.66亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.29%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+65.73亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3.93亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">华为概念</div>
-            <div style="font-size:.7em;color:#a09890">BK0854</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4311.34</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.75%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+52.94亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.00%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+93.44亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-40.50亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">6G概念</div>
-            <div style="font-size:.7em;color:#a09890">BK0964</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2134.78</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.11%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+52.17亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:100%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+7.22%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+46.66亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.51亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">特高压</div>
-            <div style="font-size:.7em;color:#a09890">BK0918</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2699.62</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.43%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+49.92亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:99.8432512%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+7.17%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+55.01亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.09亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">量子科技</div>
-            <div style="font-size:.7em;color:#a09890">BK0710</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3316.58</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.02%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+48.69亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:97.388672%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.27%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+46.20亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.50亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">网络安全</div>
-            <div style="font-size:.7em;color:#a09890">BK0655</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">4474.92</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.78%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+44.98亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:89.96880384%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+40.72亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4.26亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">海工装备</div>
-            <div style="font-size:.7em;color:#a09890">BK0601</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2201.39</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.11%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+44.90亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:89.79926016%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.72%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+45.55亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-6498万</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">大数据</div>
-            <div style="font-size:.7em;color:#a09890">BK0634</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">5090.16</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.28%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+44.45亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:88.90367488%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+2.11%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+56.18亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-11.72亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">2026中报预增</div>
-            <div style="font-size:.7em;color:#a09890">BK1749</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">1047.78</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.73%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+37.98亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:75.9533568%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+0.58%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+86.46亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-48.49亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">电商概念</div>
-            <div style="font-size:.7em;color:#a09890">BK0665</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2191.22</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.41%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+37.63亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:75.25656064%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.06%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+44.49亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-6.86亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">电网概念</div>
-            <div style="font-size:.7em;color:#a09890">BK1647</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">820.70</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.09%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+37.52亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:75.04283648%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+3.38%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+49.04亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-11.51亿</td>
-          <td style='font-size:.8em;color:#a09890'>亨通光电</td>
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">数据中心</div>
-            <div style="font-size:.7em;color:#a09890">BK0922</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">2078.53</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.51%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+35.84亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:71.6799744%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+1.45%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+20.65亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+15.19亿</td>
-          <td style='font-size:.8em;color:#a09890'>网宿科技</td>
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="con-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
   </div>
 </div>
 
 <!-- Stock Tab -->
-<div class="tab-content" id="stock" data-tab="stock">
+<div class="tab-content" id="tab-stock" data-tab="stock">
   <div class="grid-2">
     <div class="sec">
       <div class="sec-title">个股净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>个股</th><th>最新价</th><th>涨跌%</th><th>主力净流入</th><th>净占比</th><th>超大单</th><th>大单</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">大唐发电</div>
-            <div style="font-size:.7em;color:#a09890">601991</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">6.48</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-6.36%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-14.46亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:28.924008%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-25.25%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9.97亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.50亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">胜宏科技</div>
-            <div style="font-size:.7em;color:#a09890">300476</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">269.33</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.73%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-13.93亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:27.85867296%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-15.09%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-10.69亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.24亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">东方财富</div>
-            <div style="font-size:.7em;color:#a09890">300059</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">19.47</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.57%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-10.69亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:21.37234144%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-22.20%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-6.94亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.75亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">紫光股份</div>
-            <div style="font-size:.7em;color:#a09890">000938</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">39.95</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.88%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-10.28亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:20.5617936%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.88%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7.96亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.32亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">华虹宏力</div>
-            <div style="font-size:.7em;color:#a09890">688347</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">253.24</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-8.57%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-9.55亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:19.09306432%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-10.37%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.93亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.62亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">京东方Ａ</div>
-            <div style="font-size:.7em;color:#a09890">000725</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">5.81</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.85%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-9.12亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:18.23443424%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-12.46%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8.22亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8939万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">北方华创</div>
-            <div style="font-size:.7em;color:#a09890">002371</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">738.66</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.01%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-8.68亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:17.35848576%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-17.53%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.19亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-7.49亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">阳光电源</div>
-            <div style="font-size:.7em;color:#a09890">300274</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">116.72</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.19%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-8.08亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:16.15978592%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-16.01%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.40亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.68亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中科飞测</div>
-            <div style="font-size:.7em;color:#a09890">688361</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">324.33</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-3.53%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-7.24亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:14.47532896%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-18.00%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.35亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.88亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">恒瑞医药</div>
-            <div style="font-size:.7em;color:#a09890">600276</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">52.62</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-2.12%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-7.20亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:14.3925056%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-15.59%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.27亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.92亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">华电辽能</div>
-            <div style="font-size:.7em;color:#a09890">600396</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">16.99</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-9.29%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-6.69亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:13.3829834%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-13.48%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.97亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.72亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">海光信息</div>
-            <div style="font-size:.7em;color:#a09890">688041</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">280.99</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-1.75%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-6.42亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:12.83954016%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-11.98%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.65亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.77亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">太极实业</div>
-            <div style="font-size:.7em;color:#a09890">600667</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">22.95</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-3.49%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-6.23亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:12.45942752%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.24%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.54亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.69亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">蓝色光标</div>
-            <div style="font-size:.7em;color:#a09890">300058</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">15.10</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.98%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-5.64亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:11.27247744%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.56%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.41亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.23亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">国瓷材料</div>
-            <div style="font-size:.7em;color:#a09890">300285</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">70.96</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+0.42%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-5.49亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:10.975112%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-7.87%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.29亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.20亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">海康威视</div>
-            <div style="font-size:.7em;color:#a09890">002415</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">34.88</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-2.19%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-5.06亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:10.12758144%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-14.67%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.17亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.89亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">浪潮信息</div>
-            <div style="font-size:.7em;color:#a09890">000977</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">78.80</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.83%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-5.01亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:10.012656%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-6.77%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.14亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-8635万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">利欧股份</div>
-            <div style="font-size:.7em;color:#a09890">002131</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">5.33</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-4.14%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-5.00亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:10.00482752%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-8.87%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.71亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2940万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中兴通讯</div>
-            <div style="font-size:.7em;color:#a09890">000063</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">35.05</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-0.09%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-4.96亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.9280336%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-12.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-4.79亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1757万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">省广集团</div>
-            <div style="font-size:.7em;color:#a09890">002400</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">7.16</td>
-          <td style="text-align:right;color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-9.94%</td>
-          <td style="text-align:right">
-            <div style="color:#6b8f71;font-weight:500;font-variant-numeric:tabular-nums">-4.89亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.7879758%;height:100%;background:#6b8f71;border-radius:2px;float:left"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">-26.87%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-5.36亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4613万</td>
-          
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="stk-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
     <div class="sec">
       <div class="sec-title">个股净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>个股</th><th>最新价</th><th>涨跌%</th><th>主力净流出</th><th>净占比</th><th>超大单</th><th>大单</th></tr></thead>
-            <tbody>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">1</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">亨通光电</div>
-            <div style="font-size:.7em;color:#a09890">600487</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">62.98</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.01%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+31.21亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:62.41375488%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+16.26%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+32.58亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.37亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">2</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">网宿科技</div>
-            <div style="font-size:.7em;color:#a09890">300017</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">17.33</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+20.01%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+20.45亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:40.90208096%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+26.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+18.72亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+1.73亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#b47355;font-weight:500">3</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">长鑫科技</div>
-            <div style="font-size:.7em;color:#a09890">688825</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">55.18</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.35%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+18.77亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:37.53935872%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+9.45%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+15.37亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3.39亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">4</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">新易盛</div>
-            <div style="font-size:.7em;color:#a09890">300502</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">448.08</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.23%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+18.22亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:36.4313024%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+10.62%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+20.45亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-2.24亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#c5bdb3;font-weight:500">5</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中天科技</div>
-            <div style="font-size:.7em;color:#a09890">600522</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">35.55</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.05%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+15.26亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:30.52360864%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+11.49%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+12.96亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.30亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">6</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">莲花控股</div>
-            <div style="font-size:.7em;color:#a09890">600186</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">12.02</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+9.97%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+13.05亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:26.10161312%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+37.09%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+14.12亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.06亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">7</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">剑桥科技</div>
-            <div style="font-size:.7em;color:#a09890">603083</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">185.90</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.00%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+12.54亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:25.07218816%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+17.58%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+11.67亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+8693万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">8</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">天孚通信</div>
-            <div style="font-size:.7em;color:#a09890">300394</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">267.71</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.10%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+11.80亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:23.60526912%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+8.59%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+11.83亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-292万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">9</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中国巨石</div>
-            <div style="font-size:.7em;color:#a09890">600176</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">44.39</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+5.94%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.36亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:20.72319712%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+8.51%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+13.37亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3.01亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">10</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">杭电股份</div>
-            <div style="font-size:.7em;color:#a09890">603618</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">29.87</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.02%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.99亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:17.97553888%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+27.39%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+10.33亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-1.34亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">11</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中国稀土</div>
-            <div style="font-size:.7em;color:#a09890">000831</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">60.95</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.00%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.50亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:17.00165792%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+15.69%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+8.25亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2547万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">12</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">中际旭创</div>
-            <div style="font-size:.7em;color:#a09890">300308</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">943.00</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+2.38%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+8.49亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:16.98171904%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+4.54%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.23亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3.26亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">13</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">数据港</div>
-            <div style="font-size:.7em;color:#a09890">603881</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">29.04</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.00%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+7.09亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:14.17068992%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+25.29%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+7.12亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-335万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">14</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">行云科技</div>
-            <div style="font-size:.7em;color:#a09890">300209</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">38.93</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.13%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+6.04亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:12.08679616%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+9.02%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4.49亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+1.56亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">15</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">协创数据</div>
-            <div style="font-size:.7em;color:#a09890">300857</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">265.99</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.90%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+5.59亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:11.18547968%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+7.18%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4.65亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+9410万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">16</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">利通电子</div>
-            <div style="font-size:.7em;color:#a09890">603629</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">137.50</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.00%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+5.47亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:10.93061024%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.16%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+4.90亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5619万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">17</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">光迅科技</div>
-            <div style="font-size:.7em;color:#a09890">002281</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">191.52</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+3.61%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.98亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.95545152%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.68%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+3.47亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+1.51亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">18</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">工业富联</div>
-            <div style="font-size:.7em;color:#a09890">601138</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">66.19</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+1.47%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.87亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.73478624%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+6.92%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.36亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+2.51亿</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">19</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">盈新发展</div>
-            <div style="font-size:.7em;color:#a09890">000620</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">3.03</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.18%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.83亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.66457768%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+30.54%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.17亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-3398万</td>
-          
-        </tr>
-        <tr>
-          <td style="text-align:center;color:#8a8279;font-weight:300">20</td>
-          <td>
-            <div style="font-weight:500;color:#1a1816">华正新材</div>
-            <div style="font-size:.7em;color:#a09890">603186</div>
-          </td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">167.55</td>
-          <td style="text-align:right;color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+10.00%</td>
-          <td style="text-align:right">
-            <div style="color:#b47355;font-weight:500;font-variant-numeric:tabular-nums">+4.70亿</div>
-            <div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden">
-              <div style="width:9.39707072%;height:100%;background:#b47355;border-radius:2px;float:right"></div>
-            </div>
-          </td>
-          <td style="text-align:right;color:#7a7570;font-size:.85em;font-variant-numeric:tabular-nums">+30.53%</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">+5.61亿</td>
-          <td style="text-align:right;font-size:.85em;color:#8a8279;font-variant-numeric:tabular-nums">-9116万</td>
-          
-        </tr></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="stk-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
     </div>
   </div>
 </div>
 
 <!-- Footer -->
 <div class="ftr">
-  <div class="disclaimer">
-    本页面数据来源于东方财富公开接口，仅供参考。资金流向数据为实时统计，不代表机构真实持仓。
-    不构成任何投资建议，投资有风险，入市需谨慎。
-  </div>
-  <p>A股资金流向监控 &copy; 2026-08-16 20:53</p>
-  <p style="margin-top:4px;opacity:.6">数据来源: 东方财富</p>
+  <div class="disclaimer">数据来源: 东方财富公开接口，仅供参考。资金流向为实时统计，不代表机构真实持仓。不构成投资建议，投资有风险。</div>
+  <p>A股资金流向监控 · 实时版</p>
 </div>
-
 </div>
 
 <!-- Back to Top -->
-<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'}')">
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <script>
+// ── Config ────────────────────────────────────────────────────
+const REFRESH_INTERVAL = 60; // seconds
+const API_BASE = 'https://push2.eastmoney.com/api/qt/clist/get';
+const FIELDS = 'f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f124,f204,f205';
+let countdown = REFRESH_INTERVAL;
+let isMarketOpen = false;
+
+// ── JSONP ─────────────────────────────────────────────────────
+let jsonpCounter = 0;
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'jsonp_cb_' + (++jsonpCounter) + '_' + Date.now();
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error('timeout'));
+    }, 8000);
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[cbName] = (data) => { cleanup(); resolve(data); };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'cb=' + cbName;
+    script.onerror = () => { cleanup(); reject(new Error('load error')); };
+    document.head.appendChild(script);
+  });
+}
+
+// ── Data Fetching ─────────────────────────────────────────────
+function buildUrl(fs, pz, po) {
+  return `${API_BASE}?pn=1&pz=${pz}&po=${po}&np=1&fltt=2&invt=2&fid=f62&fs=${fs}&fields=${FIELDS}`;
+}
+
+async function fetchAll() {
+  const queries = [
+    { id: 'ind-in',  url: buildUrl('m:90+t:2', 20, 0), isStock: false },
+    { id: 'ind-out', url: buildUrl('m:90+t:2', 20, 1), isStock: false },
+    { id: 'con-in',  url: buildUrl('m:90+t:3', 20, 0), isStock: false },
+    { id: 'con-out', url: buildUrl('m:90+t:3', 20, 1), isStock: false },
+    { id: 'stk-in',  url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 20, 0), isStock: true },
+    { id: 'stk-out', url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 20, 1), isStock: true },
+    // Extra: full counts
+    { id: '_ind_total', url: buildUrl('m:90+t:2', 1, 0) },
+    { id: '_con_total', url: buildUrl('m:90+t:3', 1, 0) },
+    { id: '_stk_total', url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 1, 0) },
+  ];
+
+  const results = await Promise.allSettled(queries.map(q => jsonp(q.url)));
+  
+  results.forEach((r, i) => {
+    const q = queries[i];
+    if (r.status === 'fulfilled' && r.value) {
+      const data = r.value.data;
+      if (q.id.startsWith('_')) {
+        // Just need total count
+        const countEl = q.id === '_ind_total' ? 'indCount' : q.id === '_con_total' ? 'conCount' : 'stkCount';
+        document.getElementById(countEl).textContent = data?.total || '—';
+      } else {
+        const items = data?.diff || [];
+        renderTable(q.id, items, q.isStock);
+      }
+    }
+  });
+
+  updateSummary();
+}
+
+// ── Formatting ────────────────────────────────────────────────
+function fmtAmt(v) {
+  if (v === null || v === undefined || v === '-') return '—';
+  const n = parseFloat(v);
+  if (isNaN(n)) return '—';
+  const yi = n / 1e8;
+  const sign = yi > 0 ? '+' : '';
+  return Math.abs(yi) >= 1 ? `${sign}${yi.toFixed(2)}亿` : `${sign}${(n/1e4).toFixed(0)}万`;
+}
+
+function fmtPct(v) {
+  if (v === null || v === undefined || v === '-') return '—';
+  const n = parseFloat(v);
+  if (isNaN(n)) return '—';
+  return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+
+function clr(v) {
+  const n = parseFloat(v);
+  return isNaN(n) || n === 0 ? '#9a917e' : n > 0 ? '#b47355' : '#6b8f71';
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+// ── Render Table ──────────────────────────────────────────────
+function renderTable(containerId, items, isStock) {
+  const el = document.getElementById(containerId);
+  if (!items.length) { el.innerHTML = '<div style="padding:20px;color:#7a7570;text-align:center">暂无数据</div>'; return; }
+
+  let html = '<table><thead><tr><th>#</th><th>' + (isStock ? '个股' : '板块') + '</th><th>最新</th><th>涨跌%</th><th>主力净流入</th><th>净占比</th><th>超大单</th><th>大单</th>' + (isStock ? '' : '<th>领涨股</th>') + '</tr></thead><tbody>';
+  
+  items.forEach((item, i) => {
+    const rank = i + 1;
+    const rc = rank <= 3 ? '#b47355' : rank <= 5 ? '#8a7e72' : '#a09890';
+    const rw = rank <= 5 ? '500' : '300';
+    const name = esc(item.f14 || '');
+    const code = esc(item.f12 || '');
+    const price = parseFloat(item.f2) || 0;
+    const change = item.f3;
+    const mainNet = item.f62;
+    const mainPct = item.f184;
+    const superNet = item.f66;
+    const bigNet = item.f72;
+    const lead = esc(item.f204 || '');
+
+    try {
+      const mv = parseFloat(mainNet) / 1e8;
+      const bw = Math.min(Math.abs(mv) * 2, 100);
+      const bc = mv > 0 ? '#b47355' : '#6b8f71';
+      const bd = mv > 0 ? 'right' : 'left';
+      
+      html += `<tr>
+        <td style="text-align:center;color:${rc};font-weight:${rw}">${rank}</td>
+        <td><div style="font-weight:500;color:#1a1816">${name}</div><div style="font-size:.68em;color:#a09890">${code}</div></td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">${price ? price.toFixed(2) : '—'}</td>
+        <td style="text-align:right;color:${clr(change)};font-weight:500;font-variant-numeric:tabular-nums">${fmtPct(change)}</td>
+        <td style="text-align:right"><div style="color:${clr(mainNet)};font-weight:500;font-variant-numeric:tabular-nums">${fmtAmt(mainNet)}</div><div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden"><div style="width:${bw}%;height:100%;background:${bc};border-radius:2px;float:${bd}"></div></div></td>
+        <td style="text-align:right;color:#7a7570;font-size:.83em;font-variant-numeric:tabular-nums">${fmtPct(mainPct)}</td>
+        <td style="text-align:right;font-size:.83em;color:#8a8279;font-variant-numeric:tabular-nums">${fmtAmt(superNet)}</td>
+        <td style="text-align:right;font-size:.83em;color:#8a8279;font-variant-numeric:tabular-nums">${fmtAmt(bigNet)}</td>
+        ${isStock ? '' : `<td style="font-size:.78em;color:#a09890">${lead}</td>`}
+      </tr>`;
+    } catch(e) {}
+  });
+  
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+// ── Summary Update ────────────────────────────────────────────
+function updateSummary() {
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const timeStr = now.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  document.getElementById('updateTime').textContent = timeStr;
+
+  // Market hours check (9:15-15:05 Beijing time, Mon-Fri)
+  const day = now.getDay();
+  isMarketOpen = day >= 1 && day <= 5 && ((h === 9 && m >= 15) || (h > 9 && h < 15) || (h === 15 && m <= 5));
+  const dot = document.getElementById('liveDot');
+  const status = document.getElementById('marketStatus');
+  if (isMarketOpen) {
+    dot.classList.remove('closed');
+    status.textContent = '盘中';
+  } else if (h >= 15 && h < 17) {
+    dot.classList.add('closed');
+    status.textContent = '已收盘';
+  } else if (h < 9 || (h === 9 && m < 15)) {
+    dot.classList.add('closed');
+    status.textContent = '盘前';
+  } else {
+    dot.classList.add('closed');
+    status.textContent = '已收盘';
+  }
+
+  // Top 3 inflow/outflow from industry table
+  const indInEl = document.getElementById('ind-in');
+  const rows = indInEl.querySelectorAll('tbody tr');
+  if (rows.length >= 3) {
+    const names = [];
+    for (let i = 0; i < 3; i++) {
+      const nameEl = rows[i].querySelector('td:nth-child(2) div:first-child');
+      if (nameEl) names.push(nameEl.textContent);
+    }
+    document.getElementById('topInflow').textContent = names.join(' · ') || '—';
+  }
+
+  const indOutEl = document.getElementById('ind-out');
+  const rowsOut = indOutEl.querySelectorAll('tbody tr');
+  if (rowsOut.length >= 3) {
+    const names = [];
+    for (let i = 0; i < 3; i++) {
+      const nameEl = rowsOut[i].querySelector('td:nth-child(2) div:first-child');
+      if (nameEl) names.push(nameEl.textContent);
+    }
+    document.getElementById('topOutflow').textContent = names.join(' · ') || '—';
+  }
+}
+
+// ── Tab Switching ─────────────────────────────────────────────
 function switchTab(tab, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -2519,15 +389,47 @@ function switchTab(tab, btn) {
     el.classList.toggle('visible', el.dataset.tab === tab);
   });
 }
-function navTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+
+function navTo(id, btn) {
+  const el = document.getElementById(id === 'overview' ? 'overview' : 'tab-' + id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  btn.classList.add('active');
+  // Also switch tab if needed
+  if (id !== 'overview') {
+    const tabBtn = document.querySelector(`.filter-btn[onclick*="${id}"]`);
+    if (tabBtn) switchTab(id, tabBtn);
+  }
 }
-window.addEventListener('scroll', function() {
+
+// ── Countdown & Auto Refresh ──────────────────────────────────
+function tick() {
+  countdown--;
+  document.getElementById('countdown').textContent = countdown + 's';
+  if (countdown <= 0) {
+    countdown = REFRESH_INTERVAL;
+    refresh();
+  }
+}
+
+async function refresh() {
+  try {
+    await fetchAll();
+    document.getElementById('refreshInfo').textContent = `每${REFRESH_INTERVAL}秒自动刷新 · 实时数据`;
+  } catch (e) {
+    console.error('Refresh failed:', e);
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
   document.getElementById('toTop').classList.toggle('show', window.scrollY > 400);
 });
+
+// First load
+refresh();
+// Countdown timer
+setInterval(tick, 1000);
 </script>
 </body>
 </html>
