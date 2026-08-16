@@ -261,6 +261,85 @@ body{
   .radar{grid-template-columns:1fr}
   .hdr-right{gap:20px}
 }
+
+/* ── Filter Tabs ────────────────────────── */
+.filter-bar{
+  display:flex;gap:6px;margin-bottom:24px;
+  background:rgba(255,255,255,.3);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:12px;padding:4px;
+  width:fit-content;
+}
+.filter-btn{
+  padding:8px 20px;border-radius:9px;border:none;
+  background:transparent;color:#7a7570;
+  font-size:.82em;font-weight:500;cursor:pointer;
+  transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  letter-spacing:.5px;font-family:inherit;
+}
+.filter-btn:hover{color:#3a3632;background:rgba(255,255,255,.4)}
+.filter-btn.active{
+  background:rgba(255,255,255,.7);color:#1a1816;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.event-section{display:none}
+.event-section.visible{display:block}
+
+/* ── Collapsible Cards ──────────────────── */
+.ev{cursor:pointer}
+.ev-details{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.25,.46,.45,.94),opacity .3s;
+  opacity:0;
+}
+.ev.expanded .evdetails{max-height:800px;opacity:1}
+.ev-toggle{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.75em;color:#a09890;margin-top:8px;
+  transition:color .2s;
+}
+.ev-toggle:hover{color:#5a524a}
+.ev-toggle svg{
+  width:12px;height:12px;transition:transform .3s;
+  fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;
+}
+.ev.expanded .ev-toggle svg{transform:rotate(180deg)}
+
+/* ── Back to Top ────────────────────────── */
+.to-top{
+  position:fixed;bottom:28px;right:28px;z-index:100;
+  width:44px;height:44px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(10px);
+  transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  pointer-events:none;
+}
+.to-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.to-top:hover{background:rgba(255,255,255,.8);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.to-top svg{width:18px;height:18px;fill:none;stroke:#5a524a;stroke-width:2;stroke-linecap:round}
+
+/* ── Sticky Nav ─────────────────────────── */
+.nav-bar{
+  position:sticky;top:0;z-index:50;
+  display:flex;gap:4px;padding:6px 8px;
+  background:rgba(244,241,236,.8);
+  backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid rgba(255,255,255,.4);
+  margin:-24px -32px 24px;
+}
+.nav-link{
+  padding:6px 14px;border-radius:8px;border:none;
+  background:transparent;color:#8a8279;
+  font-size:.78em;font-weight:500;cursor:pointer;
+  transition:all .25s;font-family:inherit;letter-spacing:.3px;
+}
+.nav-link:hover{color:#3a3632;background:rgba(255,255,255,.4)}
+.nav-link.active{color:#1a1816;background:rgba(255,255,255,.5)}
 </style>
 </head>
 <body>
@@ -274,24 +353,32 @@ body{
 <div class="hdr glass-strong">
   <div class="hdr-left">
     <h1>Global <strong>Radar</strong></h1>
-    <div class="sub">2026-08-16 &nbsp;&middot;&nbsp; 全球事件 &rarr; A股影响分析 &nbsp;&middot;&nbsp; 2026-08-16 11:01 UTC</div>
+    <div class="sub">2026-08-16 &nbsp;&middot;&nbsp; 全球事件 &rarr; A股影响分析 &nbsp;&middot;&nbsp; 2026-08-16 11:52 UTC</div>
   </div>
   <div class="hdr-right">
-    <div class="hdr-stat"><div class="val" style="color:#b47355">8</div><div class="lbl">利好</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#b47355">7</div><div class="lbl">利好</div></div>
     <div class="hdr-stat"><div class="val" style="color:#b47355">▲ 偏多</div><div class="lbl">情绪</div></div>
     <div class="hdr-stat"><div class="val" style="color:#6b8f71">4</div><div class="lbl">利空</div></div>
-    <div class="hdr-stat"><div class="val" style="color:#8a8279">219</div><div class="lbl">事件</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#8a8279">110</div><div class="lbl">事件</div></div>
   </div>
 </div>
 
 <hr class="divider">
 
+<!-- ═══ STICKY NAV ═══ -->
+<div class="nav-bar">
+  <button class="nav-link active" onclick="scrollTo('#radar-section')">概览</button>
+  <button class="nav-link" onclick="scrollTo('#events-section')">事件</button>
+  <button class="nav-link" onclick="scrollTo('#chains-section')">传导链</button>
+  <button class="nav-link" onclick="scrollTo('#industry-section')">行业</button>
+</div>
+
 <!-- ═══ MARKET RADAR ═══ -->
-<div class="radar">
+<div class="radar" id="radar-section">
   <div class="rc glass">
     <div class="rc-label">全球环境</div>
     <div class="rc-value" style="color:#b47355">▲ 偏多</div>
-    <div class="rc-sub">利好 8 &ensp;/&ensp; 利空 4 &ensp;/&ensp; 中性 18</div>
+    <div class="rc-sub">利好 7 &ensp;/&ensp; 利空 4 &ensp;/&ensp; 中性 19</div>
   </div>
   <div class="rc glass">
     <div class="rc-label">风险指数</div>
@@ -302,25 +389,56 @@ body{
   <div class="rc glass">
     <div class="rc-label">今日变量</div>
     <div class="rc-sub" style="margin-top:10px;line-height:1.9;color:#4a4540">
-      1. [中性] 新华财经周报：8月10日至8月16日<br>2. [偏利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡<br>3. [中性] 航行警告！渤海海峡黄海北部执行军事任务 禁止驶入
+      1. [利空] 国泰海通：中国股市将逐步迎来“金秋行情” 积极部署<br>2. [中性] 新华财经周报：8月10日至8月16日<br>3. [偏利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡
     </div>
   </div>
 </div>
 
 <!-- ═══ KEY POINTS ═══ -->
-<div class="sec"><div class="sec-title">今日要点</div><div class="kp-list"><div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 新华财经周报：8月10日至8月16日</span></div>
+<div class="sec"><div class="sec-title">今日要点</div><div class="kp-list"><div class="kp-item glass"><span class="kp-tag" style="background:#6b8f71">利空</span><span>[利空] 国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 新华财经周报：8月10日至8月16日</span></div>
 <div class="kp-item glass"><span class="kp-tag" style="background:#6b8f71">利空</span><span>[偏利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span></div>
 <div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span></div>
 <div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 事关A股，多个大事，就在下周</span></div>
-<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 美媒：中国成为全球企业“绕不开的技术和创新来源”</span></div>
 </div></div>
 
-<!-- ═══ DOMESTIC EVENTS ═══ -->
-<div class="sec">
-  <div class="sec-title">国内事件 <span class="badge">Domestic</span></div>
-  <div class="ev glass">
+<!-- ═══ EVENTS SECTION ═══ -->
+<div id="events-section">
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterEvents('all',this)">全部</button>
+  <button class="filter-btn" onclick="filterEvents('domestic',this)">国内</button>
+  <button class="filter-btn" onclick="filterEvents('global',this)">全球</button>
+</div>
+
+<div class="event-section visible" data-filter="domestic">
+  <div class="sec">
+    <div class="sec-title">国内事件 <span class="badge">Domestic</span></div>
+    <div class="ev glass">
   <div class="ev-top">
     <span class="ev-rank">1</span>
+    <span class="ev-tag" style="background:#6b8f71">利空</span>
+    <span class="ev-score">6.3<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#6b8f71">&#9660;</span>
+  </div>
+  <h3>国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</h3>
+  <div class="summary">国泰海通策略认为，从基本点看，无风险利率下降、资本市场制度改革与经济结构转型，中国市场有较强承托力，“转型牛”的历史进程不会就此前挫折结束。对于后市，我们认为中国股市将逐步迎来“金秋行情”，积极部署。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150059" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">2</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">6.0<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -343,7 +461,7 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">2</span>
+    <span class="ev-rank">3</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.7<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -366,7 +484,7 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">3</span>
+    <span class="ev-rank">4</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.6<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -389,7 +507,7 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">4</span>
+    <span class="ev-rank">5</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.5<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -412,7 +530,7 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">5</span>
+    <span class="ev-rank">6</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.5<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -435,7 +553,7 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">6</span>
+    <span class="ev-rank">7</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.5<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -458,22 +576,22 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">7</span>
+    <span class="ev-rank">8</span>
     <span class="ev-tag" style="background:#c4956e">偏利好</span>
     <span class="ev-score">5.4<em>/10</em></span>
     <span class="ev-stars" title="单一可靠">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
     <span class="ev-dir" style="color:#b47355">&#9650;</span>
   </div>
-  <h3>【紫金黄金国际发布中期业绩：母公司拥有人应占溢利14</h3>
+  <h3>紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%</h3>
   <div class="summary">紫金黄金国际发布截至2026年6月30日止6个月中期业绩，该集团取得收入39.87亿美元，同比增加99.67%;母公司拥有人应占溢利14.51亿美元，同比增加178.83%;每股盈利0.54美元；拟派中期股息每股1.5港元。公告称，矿山运营方面，2026年上半年，本集团矿产金产量约27.3吨，其中控股矿山产量约26.0吨，同比增长约37%;黄金销量约为26.1吨，平均售价约为每盎司4643美元。成熟资产整体稳定运行，武里蒂卡金矿、罗斯贝尔金矿、左岸金矿及奥罗拉金矿均实现同比增产;而于2025年4月及10月分别完成收购的加纳阿基姆金矿和哈萨克斯坦瑞果多金矿已全面融入本集团的运营体系，成为产量及盈利增长的重要驱动。</div>
   <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">【紫金黄金国际发布中期业绩：母公司拥有人应占溢利14</span>
+  <span class="chain-node trigger">紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">重要公司动态引发行业关注</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股相关个股及板块可能联动</span>
 </div><div class="chain-row">
-  <span class="chain-node trigger">【紫金黄金国际发布中期业绩：母公司拥有人应占溢利14（黄金）</span>
+  <span class="chain-node trigger">紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%（黄金）</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">避险需求推升金价，全球资金配置黄金资产</span>
   <span class="chain-arr">&rarr;</span>
@@ -487,30 +605,30 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">8</span>
-    <span class="ev-tag" style="background:#c4956e">偏利好</span>
-    <span class="ev-score">5.4<em>/10</em></span>
+    <span class="ev-rank">9</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.2<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#b47355">&#9650;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
   </div>
-  <h3>中信建投：A股科技修复尚未结束，配置上应优先选择基本面确定性较高的核心资产</h3>
-  <div class="summary">中信建投发布研报称，7月底全球科技去杠杆基本结束，海外科技在宏观约束缓解和产业景气验证下率先修复，市场重新由资金面定价转向基本面定价。A股科技修复相对偏慢，主要源于前期加速上涨积累的成交拥挤、融资盘压力及监管降温，而非产业趋势发生逆转。历史经验表明，资金结构主要影响行情节奏，中期方向仍由业绩兑现决定。当前算力产业链需求仍具韧性，A股科技修复尚未结束，配置上应优先选择基本面确定性较高的核心资产，同时关注创新药和工业金属。行业重点关注：光通信、服务器、创新药、有色金属、机械、新能源等。</div>
+  <h3>股票型ETF周净流出近600亿 中证1000净流出金额最高</h3>
+  <div class="summary">数据显示，8月10日-8月14日当周，全市场股票型ETF的资金净流出金额达596.54亿元。宽基ETF是本轮资金流出的核心主力，合计净流出超424亿元。其中，中证1000相关ETF净流出最多，上周净流出金额为141.76亿元，最新规模合计为438.84亿元；沪深300相关ETF净流出同样超百亿，上周净流出金额为110.16亿元，最新规模合计为2749.28亿元。此外，中证500相关ETF、创业板指相关ETF、中证2000相关ETF、中证A500相关ETF、科创50相关ETF上周分别净流出金额达51.06亿元、35.49亿元、20.81亿元、18.1亿元、10.15亿元。（财联社）</div>
   <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">中信建投：A股科技修复尚未结束，配置上应优先选择基本面确定性较高的核心资产</span>
+  <span class="chain-node trigger">股票型ETF周净流出近600亿 中证1000净流出金额最高</span>
   <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">重要政策或法规变化</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
   <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股相关行业板块受影响</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
 </div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">新能源</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">有色金属</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">医药</span></div>
+  <div class="ind-tags"></div>
   <div class="ev-meta">
     <span>1 源 &middot; 1 篇</span>
-    <a href="https://news.10jqka.com.cn/20260816/c678986432.shtml" target="_blank" rel="noopener">同花顺</a> 
+    <a href="https://news.10jqka.com.cn/20260816/c678986651.shtml" target="_blank" rel="noopener">同花顺</a> 
   </div>
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">9</span>
+    <span class="ev-rank">10</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
     <span class="ev-score">5.1<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
@@ -537,36 +655,14 @@ body{
     <a href="https://wallstreetcn.com/live/3150047" target="_blank" rel="noopener">华尔街见闻</a> 
   </div>
 </div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">10</span>
-    <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">5.1<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
-  </div>
-  <h3>厄尔尼诺致糖期货大涨价</h3>
-  <div class="summary">近期，强厄尔尼诺事件发生概率持续增大，暴雨、干旱等极端天气，在全球多地肆虐。多个食糖生产国和出口国的甘蔗种植产业受到冲击。随着市场对主要甘蔗产区产量将下降的担忧升温，全球糖期货价格日前也升至年内高点。美国国家海洋和大气管理局发布报告显示，今年10月至12月出现强厄尔尼诺事件的概率为81%，其强度可能跻身1950年以来最强厄尔尼诺事件之列。</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">厄尔尼诺致糖期货大涨价</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">美股大幅波动，全球风险偏好剧变</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股开盘情绪受外盘影响，科技股联动效应明显</span>
-</div></div>
-  <div class="ind-tags"></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 1 篇</span>
-    <a href="https://wallstreetcn.com/live/3150031" target="_blank" rel="noopener">华尔街见闻</a> 
+
   </div>
 </div>
 
-</div>
-
-<!-- ═══ GLOBAL EVENTS ═══ -->
-<div class="sec">
-  <div class="sec-title">全球事件 <span class="badge">Global</span></div>
-  <div class="ev glass">
+<div class="event-section visible" data-filter="global">
+  <div class="sec">
+    <div class="sec-title">全球事件 <span class="badge">Global</span></div>
+    <div class="ev glass">
   <div class="ev-top">
     <span class="ev-rank">1</span>
     <span class="ev-tag" style="background:#7da07f">偏利空</span>
@@ -632,6 +728,75 @@ body{
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
     <span class="ev-dir" style="color:#9a917e">&#9679;</span>
   </div>
+  <h3>美国史无前例 特朗普家族加密企业World Liberty获银行牌照</h3>
+  <div class="summary">美国货币监理署（OCC）近日有条件批准特朗普家族关联的加密企业World Liberty Trust Co．设立银行牌照，使其能够直接发行与美元挂钩的稳定币。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">美国史无前例 特朗普家族加密企业World Liberty获银行牌照</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 2 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvp1462590.shtml" target="_blank" rel="noopener">环球市场播报</a> <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnqpu9880058.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">4</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.6<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>伯克希尔二季度持仓曝光：重仓Alphabet近380亿美元，家建股同步加码</h3>
+  <div class="summary">伯克希尔·哈撒韦（Berkshire Hathaway）最新披露的二季度投资组合显示，该公司显著增持了谷歌母公司Alphabet的股份，并持续加码美国住宅建筑板块。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">伯克希尔二季度持仓曝光：重仓Alphabet近380亿美元，家建股同步加码</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvq1081660.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">5</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>伊朗称逮捕或消灭美军者将获奖励</h3>
+  <div class="summary">伊朗陆军总司令哈塔米今天（8月16日）发表声明称，任何逮捕或消灭一名入境美国军人的伊朗人员，都将获得50亿土曼（约合3万美元）的悬赏奖励。 (CCTV国际时讯)</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">伊朗称逮捕或消灭美军者将获奖励</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150063" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">6</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
   <h3>美媒：美从西太平洋撤出最后一艘航母</h3>
   <div class="summary">美国总统唐纳德·特朗普对伊朗的战争正在挑战美国航空母舰的极限，并使西太平洋没有一艘这种关键的美国军舰。在对“亚伯拉罕·林肯”号这艘长期部署的航空母舰上官兵的心理健康和补给问题的担忧日益加剧之际，“乔治·华盛顿”号航空母舰即将离开太平洋，预计将取代目前在中东的“林肯”号。最初计划于5月返航的“林肯”号的在航时间已经延长，以支持对伊朗的行动。如果美国海军在未来数月部署另一艘航母，那么，美国在太平洋没有航母的局面可能是短暂的。但分析人士表示，这表明，在特朗普政府进一步从亚太地区抽身、把重点放在西半球之际，对伊朗的无限期行动已让一些美国水兵精疲力尽。（参考消息）</div>
   <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
@@ -655,9 +820,9 @@ body{
 </div>
 <div class="ev glass">
   <div class="ev-top">
-    <span class="ev-rank">4</span>
+    <span class="ev-rank">7</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">4.8<em>/10</em></span>
+    <span class="ev-score">4.4<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
     <span class="ev-dir" style="color:#9a917e">&#9679;</span>
   </div>
@@ -666,142 +831,21 @@ body{
   <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
   <span class="chain-node trigger">特朗普家族旗舰加密企业获信托银行初步牌照，可自主发行与托管40亿美元稳定币</span>
   <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
   <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
-</div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 3 篇</span>
-    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvq1085110.shtml" target="_blank" rel="noopener">环球市场播报</a> <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvp1462590.shtml" target="_blank" rel="noopener">环球市场播报</a> <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnqpu9880058.shtml" target="_blank" rel="noopener">环球市场播报</a> 
-  </div>
-</div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">5</span>
-    <span class="ev-tag" style="background:#7da07f">偏利空</span>
-    <span class="ev-score">4.8<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#6b8f71">&#9660;</span>
-  </div>
-  <h3>Jane Street 十年来首月亏损 150 亿美元 - 《财富》杂志</h3>
-  <div class="summary">Jane Street 十年来首月下跌 150 亿美元《财富》杂志，人工智能股暴跌，Jane Street 在 7 月份损失了 150 亿美元Bloomberg.comJane Street 在情境意识崩溃后遭受了 150 亿美元的损失《金融时报》Jane Street 在情境意识遇到麻烦后损失了约 150 亿美元《华尔街日报》独家报道：Jane Street 在 7 月份因情境意识遭受了 150 亿美元的损失消息人士称，意识、人工智能抛售路透</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">Jane Street 十年来首月亏损 150 亿美元 - 《财富》杂志</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">美股大幅波动，全球风险偏好剧变</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股开盘情绪受外盘影响，科技股联动效应明显</span>
-</div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#6b8f71;color:#6b8f71">AI</span></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 1 篇</span>
-    <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxNcFdKV0tFV3U0alZoNDNvb25fdmRfNUJfU3NOdWxWOUtaOFlrWnEyVXBHR3JqYkNxUlhEWXpiVkMwaDE3Qmg1YlN0aTFsbmRidnZwOTFpYWZlYUg2bDgwRlVhb3UxcWpRTjJ0M2dhd3V5MjZ6VWVKN0xPR0xnXzQ4aDRoRkpmN2tRRExxRDQ3TU8wM0RjR3BNQjdYVQ?oc=5" target="_blank" rel="noopener">Fortune</a> 
-  </div>
-</div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">6</span>
-    <span class="ev-tag" style="background:#c4956e">偏利好</span>
-    <span class="ev-score">4.8<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#b47355">&#9650;</span>
-  </div>
-  <h3>消费者如何获得最高法院驳回的特朗普关税退款 - 哥伦比亚广播公司新闻</h3>
-  <div class="summary">消费者如何获得最高法院驳回的特朗普关税退款哥伦比亚广播公司新闻关税退款正在提振企业利润和GDP，因为顺风汇合将经济增长推至4.3%《财富》关税退款已经到来，并大幅提高盈利《华尔街日报》关税退款软化了美联储的传递警告真正的投资建议关税退款：孟加拉国服装制造商面临新的障碍Fibre2Fashion</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">消费者如何获得最高法院驳回的特朗普关税退款 - 哥伦比亚广播公司新闻</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
-</div><div class="chain-row">
-  <span class="chain-node trigger">消费者如何获得最高法院驳回的特朗普关税退款 - 哥伦比亚广播公司新闻</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">地缘风险升温，全球避险情绪上升</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股军工、黄金板块受益，风险偏好下降</span>
-</div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 1 篇</span>
-    <a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1yNXNaSUF1RmFnQVZEdFlDYXU5WkJKRVVxSXRkWmxMZ3JyZkRTWUh5dTlTa21vNVNtMUkxMjZITWZZQ01tUm9ZdEFxdHVlR1pScGlEc0lONF9nLWNGbnJQUmtzZzdERnN2U29JcV9rcw?oc=5" target="_blank" rel="noopener">CBS News</a> 
-  </div>
-</div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">7</span>
-    <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">4.7<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
-  </div>
-  <h3>与特朗普相关的加密货币企业世界自由信托基金以前所未有的总统举动授予银行地位 - ABC News - 突发新闻、最新新闻和视频</h3>
-  <div class="summary">与特朗普相关的加密货币企业世界自由信托公司以史无前例的方式为总统授予银行地位美国监管机构批准了特朗普支持的加密货币公司世界自由金融公司的银行执照路透社</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">与特朗普相关的加密货币企业世界自由信托基金以前所未有的总统举动授予银行地位 - ABC News - 突发新闻、最新新闻和视频</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
 </div></div>
   <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
   <div class="ev-meta">
     <span>1 源 &middot; 1 篇</span>
-    <a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPRXM3NUxTM2JsbHQwUTN6cW9DbjQ1VUdBUC1UMlJtZXliRzlEMm9GQ0l5cE81Nko1Y2M3NzBHWlZfQ25KWG9Hb3EwdVVjd1ViWXdTcEJrdGFGaDItRUQyQTh4bG1qb2RHOEE1N0pBZXdhMnJwZ2pYUVZnMWRhdWVMMXJHVUxRNDdsZm9MdkN0d01oMUNKR3VQU0h6SU1rNXZEVnIxejB30gGrAUFVX3lxTE5Ia3FVVUFLTjdOekdSbjZFa2w0UXcydEtZZHFMdG9PY2hzbERqZXhJZWVJRzk5ZTdxQVBlbTh6T3pqckdjZmo4TTMwVlV2cVV2TkJlN3NVaDBfbFdJRmhxai1OSjBrS0JYcGJGLVdNcnJ5Szh1TVhDejRjb3A5SmlvU0tSTWRNOGc5RU5iTzByNTc4cUpEdEk1TnJpbXdnZE9nbW5VbnZINXZxWQ?oc=5" target="_blank" rel="noopener">ABC News - Breaking News, Latest News and Videos</a> 
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvq1085110.shtml" target="_blank" rel="noopener">环球市场播报</a> 
   </div>
 </div>
 <div class="ev glass">
   <div class="ev-top">
     <span class="ev-rank">8</span>
     <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">4.6<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
-  </div>
-  <h3>今日最佳 CD 利率，2026 年 8 月 15 日星期六：最佳 CD 账户赚取 4.30% APY</h3>
-  <div class="summary">今日最佳 CD 利率，2026 年 8 月 15 日星期六：最佳 CD 账户赚取 4.30% APY</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">今日最佳 CD 利率，2026 年 8 月 15 日星期六：最佳 CD 账户赚取 4.30% APY</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
-</div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 2 篇</span>
-    <a href="https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-saturday-august-15-2026-best-cd-account-earns-430-apy-100000412.html" target="_blank" rel="noopener">Yahoo Personal Finance</a> <a href="https://finance.yahoo.com/personal-finance/banking/article/best-cd-rates-today-sunday-august-16-2026-lock-in-up-to-430-apy-100000956.html" target="_blank" rel="noopener">Yahoo Personal Finance</a> 
-  </div>
-</div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">9</span>
-    <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">4.6<em>/10</em></span>
-    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
-    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
-  </div>
-  <h3>2026 年 8 月 16 日今日（星期日）抵押贷款和再融资利率：利率大多低于上周</h3>
-  <div class="summary">今天，星期六，2026 年 8 月 15 日抵押贷款和再融资利率：本周末利率下降</div>
-  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
-  <span class="chain-node trigger">2026 年 8 月 16 日今日（星期日）抵押贷款和再融资利率：利率大多低于上周</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
-</div></div>
-  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
-  <div class="ev-meta">
-    <span>1 源 &middot; 2 篇</span>
-    <a href="https://finance.yahoo.com/personal-finance/mortgages/article/mortgage-and-refinance-interest-rates-today-saturday-august-15-2026-rates-falling-this-weekend-100000735.html" target="_blank" rel="noopener">Yahoo Personal Finance</a> <a href="https://finance.yahoo.com/personal-finance/mortgages/article/mortgage-and-refinance-interest-rates-today-sunday-august-16-2026-rates-mostly-lower-than-last-week-100000512.html" target="_blank" rel="noopener">Yahoo Personal Finance</a> 
-  </div>
-</div>
-<div class="ev glass">
-  <div class="ev-top">
-    <span class="ev-rank">10</span>
-    <span class="ev-tag" style="background:#9a917e">中性</span>
-    <span class="ev-score">4.5<em>/10</em></span>
+    <span class="ev-score">4.2<em>/10</em></span>
     <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
     <span class="ev-dir" style="color:#9a917e">&#9679;</span>
   </div>
@@ -820,88 +864,140 @@ body{
     <a href="https://wallstreetcn.com/live/3150053" target="_blank" rel="noopener">华尔街见闻</a> 
   </div>
 </div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">9</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.2<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>民调：超半数美国选民称生活境况恶化，民主党在经济就业议题获得更多选民信任</h3>
+  <div class="summary">一项民调显示，多数美国选民表示自身生活境况在特朗普执政期间出现恶化，民众对总统处理经济、生活成本问题的不满情绪持续攀升。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">民调：超半数美国选民称生活境况恶化，民主党在经济就业议题获得更多选民信任</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnqps1158228.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">10</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">3.9<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>SpaceX上市造富高校圈：哈佛持22亿美元股份领跑</h3>
+  <div class="summary">近日，哈佛大学旗下投资管理机构哈佛管理公司（Harvard Management Company， HMC）向美国证券交易委员会提交了13F季度持仓报告；报告显示，截至2026年二季度末...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">SpaceX上市造富高校圈：哈佛持22亿美元股份领跑</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/jjxw/2026-08-16/doc-ininnqps1152773.shtml" target="_blank" rel="noopener">界面</a> 
+  </div>
+</div>
 
+  </div>
+</div>
 </div>
 
 <!-- ═══ CAUSAL CHAINS ═══ -->
-<div class="sec">
+<div id="chains-section"><div class="sec">
   <div class="sec-title">事件传导链 <span class="badge">Chain</span></div>
   <div class="glass-strong" style="padding:28px"><div class="chain-row" style="margin-bottom:10px">
   <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">1</span>
+  <span class="chain-node trigger">国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
   <span class="chain-node trigger">新华财经周报：8月10日至8月16日（原油）</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">原油价格波动影响全球能源成本</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股石油石化板块（中国石油、中国石化）受影响，化工板块成本端传导</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
   <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
   <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
   <span class="chain-node trigger">航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">5</span>
   <span class="chain-node trigger">事关A股，多个大事，就在下周</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">重要公司动态引发行业关注</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股相关个股及板块可能联动</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">5</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">6</span>
   <span class="chain-node trigger">美媒：中国成为全球企业“绕不开的技术和创新来源”</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股相关板块可能受到间接影响</span>
 </div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">6</span>
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">7</span>
   <span class="chain-node trigger">段永平、李录最新调仓曝光</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
   <span class="chain-arr">&rarr;</span>
   <span class="chain-node impact">A股相关板块可能受到间接影响</span>
-</div><div class="chain-row" style="margin-bottom:10px">
-  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">7</span>
-  <span class="chain-node trigger">英国7月通胀料回升至2.9% 英国央行警惕AI芯片与能源双重冲击</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node mid">中国经济数据反映国内经济基本面</span>
-  <span class="chain-arr">&rarr;</span>
-  <span class="chain-node impact">直接影响A股大盘走势，相关板块估值调整</span>
 </div></div>
-</div>
+</div></div>
 
 <!-- ═══ INDUSTRY RADAR ═══ -->
-<div class="sec">
+<div class="sec" id="industry-section">
   <div class="sec-title">A股行业雷达 <span class="badge">Industry</span></div>
   <div class="ind-grid"><div class="ind-cell pos">
-  <div class="ic-name">金融</div>
-  <div class="ic-dir" style="color:#b47355">利好</div>
-  <div class="ic-cnt">10 条相关</div>
-</div><div class="ind-cell pos">
   <div class="ic-name">AI</div>
   <div class="ic-dir" style="color:#b47355">利好</div>
-  <div class="ic-cnt">7 条相关</div>
+  <div class="ic-cnt">8 条相关</div>
 </div><div class="ind-cell pos">
-  <div class="ic-name">消费</div>
+  <div class="ic-name">金融</div>
   <div class="ic-dir" style="color:#b47355">利好</div>
-  <div class="ic-cnt">5 条相关</div>
+  <div class="ic-cnt">8 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">黄金</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">4 条相关</div>
 </div><div class="ind-cell pos">
   <div class="ic-name">半导体</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">消费</div>
   <div class="ic-dir" style="color:#b47355">利好</div>
   <div class="ic-cnt">3 条相关</div>
 </div><div class="ind-cell pos">
@@ -909,15 +1005,7 @@ body{
   <div class="ic-dir" style="color:#b47355">利好</div>
   <div class="ic-cnt">3 条相关</div>
 </div><div class="ind-cell pos">
-  <div class="ic-name">黄金</div>
-  <div class="ic-dir" style="color:#b47355">利好</div>
-  <div class="ic-cnt">2 条相关</div>
-</div><div class="ind-cell pos">
   <div class="ic-name">军工</div>
-  <div class="ic-dir" style="color:#b47355">利好</div>
-  <div class="ic-cnt">2 条相关</div>
-</div><div class="ind-cell pos">
-  <div class="ic-name">新能源</div>
   <div class="ic-dir" style="color:#b47355">利好</div>
   <div class="ic-cnt">2 条相关</div>
 </div><div class="ind-cell pos">
@@ -929,7 +1017,7 @@ body{
   <div class="ic-dir" style="color:#b47355">利好</div>
   <div class="ic-cnt">1 条相关</div>
 </div><div class="ind-cell pos">
-  <div class="ic-name">有色金属</div>
+  <div class="ic-name">新能源</div>
   <div class="ic-dir" style="color:#b47355">利好</div>
   <div class="ic-cnt">1 条相关</div>
 </div></div>
@@ -938,7 +1026,7 @@ body{
 <!-- ═══ SOURCE COVERAGE ═══ -->
 <div class="sec">
   <div class="sec-title">数据源覆盖</div>
-  <div class="src-row"><span class="src-chip"><b>70</b>Google News</span><span class="src-chip"><b>47</b>新浪</span><span class="src-chip"><b>45</b>Yahoo Finance</span><span class="src-chip"><b>30</b>华尔街见闻</span><span class="src-chip"><b>20</b>同花顺</span><span class="src-chip"><b>18</b>东方财富</span></div>
+  <div class="src-row"><span class="src-chip"><b>48</b>新浪</span><span class="src-chip"><b>30</b>华尔街见闻</span><span class="src-chip"><b>18</b>东方财富</span><span class="src-chip"><b>18</b>同花顺</span></div>
 </div>
 
 <!-- ═══ FOOTER ═══ -->
@@ -952,5 +1040,63 @@ body{
 </div>
 
 </div>
+
+<!-- Back to Top -->
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'}')">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// Filter tabs
+function filterEvents(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.event-section').forEach(sec => {
+    if (type === 'all') {
+      sec.classList.add('visible');
+    } else {
+      sec.classList.toggle('visible', sec.dataset.filter === type);
+    }
+  });
+}
+
+// Smooth scroll for nav
+function scrollTo(sel) {
+  const el = document.querySelector(sel);
+  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Back to top visibility
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('toTop');
+  btn.classList.toggle('show', window.scrollY > 400);
+});
+
+// Collapsible event cards
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.ev');
+  if (!card) return;
+  // Don't toggle if clicking a link
+  if (e.target.closest('a')) return;
+  card.classList.toggle('expanded');
+  const toggle = card.querySelector('.ev-toggle');
+  if (toggle) {
+    toggle.textContent = card.classList.contains('expanded') ? '收起详情' : '展开详情';
+  }
+});
+
+// Add toggle text to event cards
+document.querySelectorAll('.ev').forEach(card => {
+  const meta = card.querySelector('.ev-meta');
+  if (meta) {
+    const toggle = document.createElement('div');
+    toggle.className = 'ev-toggle';
+    toggle.innerHTML = '展开详情 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>';
+    meta.parentNode.insertBefore(toggle, meta.nextSibling);
+  }
+});
+</script>
 </body>
 </html>
