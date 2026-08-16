@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Global Radar | 2026-08-16</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  min-height:100vh;color:#1a1816;line-height:1.7;font-size:15px;
+  background:#f4f1ec;
+  overflow-x:hidden;
+}
+
+/* ── Ambient Background ─────────────────── */
+.bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+  background:
+    radial-gradient(ellipse 120% 80% at 15% 20%, rgba(200,185,165,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 90% at 85% 75%, rgba(180,190,195,.3) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(210,195,180,.2) 0%, transparent 50%),
+    linear-gradient(160deg,#f4f1ec 0%,#ece8e1 40%,#e8e4dd 100%);
+}
+.bg-grain{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+
+/* ── Glass ──────────────────────────────── */
+.glass{
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(32px) saturate(1.3);
+  -webkit-backdrop-filter:blur(32px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;
+  position:relative;overflow:hidden;
+  transition:all .4s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03);
+}
+.glass::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,.7) 30%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.7) 70%,transparent 95%);
+  pointer-events:none;
+}
+.glass:hover{
+  background:rgba(255,255,255,.55);
+  box-shadow:0 2px 8px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.04);
+}
+.glass-strong{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(48px) saturate(1.4);
+  -webkit-backdrop-filter:blur(48px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:20px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.04);
+}
+.glass-strong::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,.8) 25%,rgba(255,255,255,1) 50%,rgba(255,255,255,.8) 75%,transparent 95%);
+  pointer-events:none;
+}
+
+/* ── Layout ─────────────────────────────── */
+.wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:24px 32px 80px}
+
+/* ── Header ─────────────────────────────── */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 32px;margin-bottom:32px;flex-wrap:wrap;gap:16px;
+}
+.hdr-left h1{
+  font-size:1.5em;font-weight:300;color:#1a1816;
+  letter-spacing:2px;text-transform:uppercase;
+}
+.hdr-left h1 strong{font-weight:600;letter-spacing:0}
+.hdr-left .sub{
+  color:#5a5550;font-size:.82em;margin-top:6px;
+  font-weight:300;letter-spacing:.5px;
+}
+.hdr-right{display:flex;gap:32px;align-items:center}
+.hdr-stat{text-align:center}
+.hdr-stat .val{font-size:1.6em;font-weight:200;line-height:1.2;letter-spacing:-.5px}
+.hdr-stat .lbl{
+  font-size:.65em;color:#6a6560;text-transform:uppercase;
+  letter-spacing:2px;margin-top:3px;font-weight:400;
+}
+
+/* ── Divider ────────────────────────────── */
+.divider{
+  height:1px;border:none;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.08) 20%,rgba(0,0,0,.08) 80%,transparent);
+  margin:0 0 32px;
+}
+
+/* ── Radar Grid ─────────────────────────── */
+.radar{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:36px}
+.rc{padding:28px}
+.rc .rc-label{
+  font-size:.65em;color:#6a6560;text-transform:uppercase;
+  letter-spacing:2.5px;margin-bottom:14px;font-weight:500;
+}
+.rc .rc-value{font-size:2.4em;font-weight:200;line-height:1;letter-spacing:-1px}
+.rc .rc-sub{font-size:.82em;color:#5a5550;margin-top:10px;font-weight:300;line-height:1.6;letter-spacing:.2px}
+
+/* ── Gauge ──────────────────────────────── */
+.gauge{width:100%;height:3px;background:rgba(0,0,0,.06);border-radius:2px;margin-top:14px;overflow:hidden}
+.gauge-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.25,.46,.45,.94)}
+
+/* ── Section ────────────────────────────── */
+.sec{margin-bottom:40px}
+.sec-title{
+  font-size:.75em;font-weight:500;color:#6a6560;margin-bottom:20px;
+  text-transform:uppercase;letter-spacing:3px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-title .badge{
+  font-size:.8em;padding:2px 10px;border-radius:10px;font-weight:400;
+  background:rgba(0,0,0,.04);color:#6a6560;letter-spacing:1px;
+}
+
+/* ── Key Points ─────────────────────────── */
+.kp-list{display:flex;flex-direction:column;gap:8px}
+.kp-item{
+  display:flex;align-items:flex-start;gap:14px;padding:16px 22px;
+  font-size:.9em;font-weight:300;letter-spacing:.2px;
+}
+.kp-tag{
+  flex-shrink:0;padding:2px 8px;border-radius:4px;
+  font-size:.7em;font-weight:500;color:#fff;letter-spacing:.5px;
+}
+
+/* ── Event Cards ────────────────────────── */
+.ev{padding:28px;margin-bottom:12px}
+.ev-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.ev-rank{
+  font-size:1.1em;font-weight:200;color:#8a8279;min-width:32px;
+  font-variant-numeric:tabular-nums;letter-spacing:1px;
+}
+.ev-tag{
+  padding:3px 10px;border-radius:6px;font-size:.7em;font-weight:500;
+  color:#fff;letter-spacing:.5px;
+}
+.ev-score{font-weight:300;font-size:.9em;color:#5a524a;letter-spacing:.5px}
+.ev-score em{font-style:normal;font-weight:200;font-size:.6em;opacity:.6}
+.ev-stars{color:#a08a68;font-size:.8em;letter-spacing:3px}
+.ev-dir{font-size:.8em}
+.ev h3{
+  font-size:1em;font-weight:500;color:#1a1816;margin-bottom:8px;
+  line-height:1.6;letter-spacing:.1px;
+}
+.ev .summary{
+  color:#4a4540;font-size:.88em;margin-bottom:16px;
+  line-height:1.8;font-weight:300;
+}
+.ev-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.78em;color:#7a7570}
+.ev-meta a{color:#5a524a;font-size:.78em;transition:color .2s}
+.ev-meta a:hover{color:#2a2622;text-decoration:none}
+
+/* ── Chain ──────────────────────────────── */
+.chains{
+  margin:16px 0 12px;padding:18px 20px;border-radius:12px;
+  background:rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.04);
+}
+.chains .ch-label{
+  font-size:.62em;color:#7a7570;margin-bottom:12px;
+  text-transform:uppercase;letter-spacing:2.5px;font-weight:500;
+}
+.chain-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.86em}
+.chain-node{
+  padding:5px 14px;border-radius:8px;font-size:.88em;font-weight:400;
+  background:rgba(255,255,255,.5);
+  border:1px solid rgba(0,0,0,.06);
+  backdrop-filter:blur(8px);
+  transition:all .3s;letter-spacing:.2px;
+}
+.chain-node:hover{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.1)}
+.chain-node.trigger{border-color:rgba(138,126,114,.25);color:#6b6158;background:rgba(138,126,114,.06)}
+.chain-node.mid{border-color:rgba(160,140,120,.2);color:#8a7a68;background:rgba(160,140,120,.05)}
+.chain-node.impact{border-color:rgba(180,115,85,.3);color:#9a6e50;font-weight:500;background:rgba(180,115,85,.06)}
+.chain-arr{color:#a09890;font-size:1em}
+
+/* ── Industry Tags ──────────────────────── */
+.ind-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.ind-tag{
+  padding:4px 12px;border-radius:12px;font-size:.74em;font-weight:400;
+  border:1px solid;letter-spacing:.3px;
+  background:rgba(255,255,255,.3);
+  backdrop-filter:blur(6px);
+}
+
+/* ── Industry Grid ──────────────────────── */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.ind-cell{
+  padding:20px 16px;text-align:center;border-radius:14px;
+  background:rgba(255,255,255,.4);
+  backdrop-filter:blur(24px) saturate(1.2);
+  -webkit-backdrop-filter:blur(24px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.5);
+  position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 1px 3px rgba(0,0,0,.03);
+}
+.ind-cell::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6) 50%,transparent);
+}
+.ind-cell::after{
+  content:"";position:absolute;bottom:0;left:25%;right:25%;height:2px;border-radius:1px;
+  opacity:.5;transition:opacity .3s;
+}
+.ind-cell.pos::after{background:#b47355}
+.ind-cell.neg::after{background:#6b8f71}
+.ind-cell.neu::after{background:#9a917e}
+.ind-cell:hover{
+  background:rgba(255,255,255,.55);transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.03);
+}
+.ind-cell:hover::after{opacity:.8}
+.ind-cell .ic-name{font-weight:500;font-size:.88em;margin-bottom:6px;color:#1a1816;letter-spacing:.3px}
+.ind-cell .ic-dir{font-size:.78em;font-weight:400;letter-spacing:.5px}
+.ind-cell .ic-cnt{font-size:.68em;color:#7a7570;margin-top:4px;letter-spacing:.5px}
+
+/* ── Source Chips ───────────────────────── */
+.src-row{display:flex;flex-wrap:wrap;gap:8px}
+.src-chip{
+  padding:6px 16px;border-radius:20px;font-size:.8em;color:#5a5550;
+  background:rgba(255,255,255,.35);
+  border:1px solid rgba(255,255,255,.5);
+  backdrop-filter:blur(16px);
+  transition:all .3s;letter-spacing:.3px;
+}
+.src-chip:hover{background:rgba(255,255,255,.55);color:#2a2622}
+.src-chip b{color:#2a2622;margin-right:4px;font-weight:500}
+
+/* ── Footer ─────────────────────────────── */
+.ftr{
+  text-align:center;padding:40px 0 0;
+  color:#7a7570;font-size:.78em;letter-spacing:.5px;
+}
+.ftr .disclaimer{
+  padding:20px 24px;border-radius:14px;margin-bottom:24px;
+  font-size:.82em;color:#5a5550;line-height:1.8;font-weight:300;
+  background:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(16px);
+  letter-spacing:.2px;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:768px){
+  .wrap{padding:14px 16px 60px}
+  .hdr{flex-direction:column;align-items:flex-start;padding:20px 22px}
+  .radar{grid-template-columns:1fr 1fr}
+  .ind-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .hdr-left h1{font-size:1.2em}
+}
+@media(max-width:480px){
+  .radar{grid-template-columns:1fr}
+  .hdr-right{gap:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-grain"></div>
+
+<div class="wrap">
+
+<!-- ═══ HEADER ═══ -->
+<div class="hdr glass-strong">
+  <div class="hdr-left">
+    <h1>Global <strong>Radar</strong></h1>
+    <div class="sub">2026-08-16 &nbsp;&middot;&nbsp; 全球事件 &rarr; A股影响分析 &nbsp;&middot;&nbsp; 2026-08-16 08:31 UTC</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-stat"><div class="val" style="color:#b47355">4</div><div class="lbl">利好</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#9a917e">● 中性</div><div class="lbl">情绪</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#6b8f71">3</div><div class="lbl">利空</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#8a8279">212</div><div class="lbl">事件</div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ MARKET RADAR ═══ -->
+<div class="radar">
+  <div class="rc glass">
+    <div class="rc-label">全球环境</div>
+    <div class="rc-value" style="color:#9a917e">● 中性</div>
+    <div class="rc-sub">利好 4 &ensp;/&ensp; 利空 3 &ensp;/&ensp; 中性 23</div>
+  </div>
+  <div class="rc glass">
+    <div class="rc-label">风险指数</div>
+    <div class="rc-value" style="color:#9a917e">50</div>
+    <div class="gauge"><div class="gauge-fill" style="width:50%;background:#9a917e"></div></div>
+    <div class="rc-sub">0 安全 &ensp;&middot;&ensp; 50 警戒 &ensp;&middot;&ensp; 100 危机</div>
+  </div>
+  <div class="rc glass">
+    <div class="rc-label">今日变量</div>
+    <div class="rc-sub" style="margin-top:10px;line-height:1.9;color:#4a4540">
+      1. [利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡<br>2. [利好] Inflation moderated as Intel and Nvidia fueled the AI trade in last week's market - CNBC<br>3. [中性] 航行警告！渤海海峡黄海北部执行军事任务 禁止驶入
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KEY POINTS ═══ -->
+<div class="sec"><div class="sec-title">今日要点</div><div class="kp-list"><div class="kp-item glass"><span class="kp-tag" style="background:#6b8f71">利空</span><span>[利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#b47355">利好</span><span>[利好] Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 10-year Treasury yield inches higher as traders digest soft retail sales, monitor the Middle East - CNBC</span></div>
+</div></div>
+
+<!-- ═══ TOP EVENTS ═══ -->
+<div class="sec">
+  <div class="sec-title">全球十大事件 <span class="badge">Top 10</span></div>
+  <div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">1</span>
+    <span class="ev-tag" style="background:#6b8f71">利空</span>
+    <span class="ev-score">6.1<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#6b8f71">&#9660;</span>
+  </div>
+  <h3>新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</h3>
+  <div class="summary">本周美股各大指数表现分化，标普500迎来7800点里程碑的同时道指结束周线两连阳。美国通胀数据叠加零售销售下滑，提升了美联储9月暂停加息的概率；与此同时...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/jjxw/2026-08-16/doc-ininnqpt7938616.shtml" target="_blank" rel="noopener">一财网</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">2</span>
+    <span class="ev-tag" style="background:#b47355">利好</span>
+    <span class="ev-score">6.0<em>/10</em></span>
+    <span class="ev-stars" title="单一可靠">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#b47355">&#9650;</span>
+  </div>
+  <h3>Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC</h3>
+  <div class="summary">Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s marketCNBCSandisk stock surges as Wall Street cheers flash memory maker&#x27;s bullish outlookYahoo FinanceGoldman says these stocks are top ideas in the wake of their 2Q earningsCNBCSandisk forecasts mid-to-high-teens revenue growth through 2030ReutersPrediction: This Is What a $1,000 Investment in Sandisk Will Be Worth by 2030The Motley Fool</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC（黄金）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">避险需求推升金价，全球资金配置黄金资产</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股黄金板块（山东黄金、紫金矿业等）直接受益</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">黄金</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">新能源</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxOTXozT0VsTTdYQzZiRVo0YnBqMXhqTjdOd1h4VkNBVXBBLV94dmdRLUFrQUZHYWJWWFhmU3hidWZrRDFhMV9rR0xkMHVvZ0MtVzFrLXBaMTMxOVFKUU1zTF9OQThHYWxqQkprRjBBR0FTSU1tOENFa2RyUGJLeXZWV3hRVmtyUW1PUTJKcmtsYjNTV1lNdDZ6S3ZObldnRldQeS03SFFvLWU3dXZGS2lHV1dQcnNuYVk?oc=5" target="_blank" rel="noopener">CNBC</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">3</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.7<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</h3>
+  <div class="summary">【航行警告！渤海海峡黄海北部执行军事任务 禁止驶入】据中国海事局网站消息，大连海事局发布航行警告，8月16日16时至30日16时，渤海海峡黄海北部部分海域执行军事任务，禁止驶入。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">军工</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="http://finance.eastmoney.com/a/202608163842501524.html" target="_blank" rel="noopener">东方财富</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">4</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.7<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</h3>
+  <div class="summary">How consumers can get a refund for Trump tariffs struck down by Supreme CourtCBS NewsTariff refunds are juicing corporate profits and GDP, as tailwinds converge to propel growth to 4.3%fortune.comTariff Refunds Are Here—and Turbocharging EarningsWSJTariff Refunds Soften The Fed’s Passthrough WarningReal Investment AdviceTariff refunds: Bangladesh garment makers face a new hurdleFibre2Fashion</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">半导体</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1yNXNaSUF1RmFnQVZEdFlDYXU5WkJKRVVxSXRkWmxMZ3JyZkRTWUh5dTlTa21vNVNtMUkxMjZITWZZQ01tUm9ZdEFxdHVlR1pScGlEc0lONF9nLWNGbnJQUmtzZzdERnN2U29JcV9rcw?oc=5" target="_blank" rel="noopener">CBS News</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">5</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.6<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>10-year Treasury yield inches higher as traders digest soft retail sales, monitor the Middle East - CNBC</h3>
+  <div class="summary">10-year Treasury yield inches higher as traders digest soft retail sales, monitor the Middle EastCNBCTreasuries Gain as Weak Retail Sales Data Erode Rate-Hike BetsBloomberg.comTreasury Yields Climb AgainWSJBond Traders Keep Cointoss Wager on September Fed Hike Post-CPIBloomberg.comTreasury Yields, Dollar Fall as Data Support Fed HoldBarron&#x27;s</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">10-year Treasury yield inches higher as traders digest soft retail sales, monitor the Middle East - CNBC</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">10-year Treasury yield inches higher as traders digest soft retail sales, monitor the Middle East - CNBC</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxNRHp4VDZKbzlSTXdteldZd0RvT2NiNDdiekxSMnQ3c1FUbzVjc2xWRjN6ZVhDWnNrWWJoVGl3RlFYamdicnp4Zkx5NVVaWHVLdVphRnltZHptS2l1NDZFSTVxWGlMRWRNb2NqZ2k4X1I1ZzNaOTd1LW9KdmJhZllDTFJvQ0tqQdIBiwFBVV95cUxQTWZ5LXBfeVdBWkdkMVJuMmxBU2FLbWNJQjJxc0t5UUFPMlJ5S0t6aG4yOUplVWJlbGhBN0xGbzB3ODBySGZiVnpJRFJCaG83Nm45QUp3ZnUxZTdobkc4MEdMSnFJNVFKR0NIbldBd29uMGlnNjhnOHdTZWRkQmpNclVWbThubGJDc2ZV?oc=5" target="_blank" rel="noopener">CNBC</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">6</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>段永平、李录最新调仓曝光</h3>
+  <div class="summary">近期美股机构投资者二季度13F持仓密集披露，知名投资人段永平、李录最新调仓路径随之曝光。 段永平继续加仓拼多多 大幅减持英伟达、谷歌 据券商中国报道...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">段永平、李录最新调仓曝光</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/wm/2026-08-16/doc-ininnzcp7741422.shtml" target="_blank" rel="noopener">21世纪经济报道</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">7</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>英国7月通胀料回升至2.9% 英国央行警惕AI芯片与能源双重冲击</h3>
+  <div class="summary">未来一周，英国消费者物价数据将成为市场焦点。受人工智能引发的存储芯片短缺、能源成本走高影响，英国央行将保持警惕。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">英国7月通胀料回升至2.9% 英国央行警惕AI芯片与能源双重冲击</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国经济数据反映国内经济基本面</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">直接影响A股大盘走势，相关板块估值调整</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">半导体</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnkfv8014779.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">8</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>Woman claims her stepfather used Grok to transform childhood photo into explicit imagery - TechCrunch</h3>
+  <div class="summary">Woman claims her stepfather used Grok to transform childhood photo into explicit imageryTechCrunchHer childhood photo. Thousands of explicit images. One woman’s nightmare.The Washington PostGrok deepfakes of nude Arkansas teen have ‘completely devastated’ family, lawsuit saysThe IndependentPotts Law Firm Announces Fourth Lawsuit Against xAI in Relation to Alleged AI-Generated Child Sexual Abuse MaterialMorningstarNew federal lawsuit alleges Grok AI tool used to produce sexualized images of 16-year-oldNorthwest Arkansas Democrat-Gazette</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">Woman claims her stepfather used Grok to transform childhood photo into explicit imagery - TechCrunch</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">新能源</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxQZFpCdDNfbTNZamlqUURGQW04YzVtNzZxOU50bFZhS1hTV3RqT043ZWtXSXhHekNSTWhVdXFnLUhEazNPNXlHWlVWM0ZDcUFJLTUwWW1SNjJwSnhtRWpxNmxhQndnZHZqaDY0TS1LRUliR0hTeXJ4Xy1OdmVfT3d1RjdVUThZVXVKbnhkcVdHWTQ1ZWFYbk1jYzg1TjNXV0lfSjZJSVNYaVNmaUVPQUhLclU0bU5HVlZlV2xObVVhYVM?oc=5" target="_blank" rel="noopener">TechCrunch</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">9</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.4<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查</h3>
+  <div class="summary">华联控股公告称，公司收到加拿大外国投资审查及经济安全主管机构(FIRES)出具的《通知函》，认为公司对阿根廷阿里扎罗锂盐湖项目的投资可能影响加拿大国家安全，可能启动进一步审查。公司以约1.75亿美元受让ArgentumLithiumS.A.100%股份，获得该项目80%权益。公司暂无法评估此通知函可能产生的影响，本次交易能否最终通过审查存在不确定性。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查（锂）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">锂价波动反映新能源产业链供需</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股锂电池板块（天齐锂业、赣锋锂业）直接联动</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150047" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">10</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.4<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>厄尔尼诺致糖期货大涨价</h3>
+  <div class="summary">近期，强厄尔尼诺事件发生概率持续增大，暴雨、干旱等极端天气，在全球多地肆虐。多个食糖生产国和出口国的甘蔗种植产业受到冲击。随着市场对主要甘蔗产区产量将下降的担忧升温，全球糖期货价格日前也升至年内高点。美国国家海洋和大气管理局发布报告显示，今年10月至12月出现强厄尔尼诺事件的概率为81%，其强度可能跻身1950年以来最强厄尔尼诺事件之列。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">厄尔尼诺致糖期货大涨价</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美股大幅波动，全球风险偏好剧变</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股开盘情绪受外盘影响，科技股联动效应明显</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150031" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ CAUSAL CHAINS ═══ -->
+<div class="sec">
+  <div class="sec-title">事件传导链 <span class="badge">Chain</span></div>
+  <div class="glass-strong" style="padding:28px"><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">1</span>
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">1</span>
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
+  <span class="chain-node trigger">Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
+  <span class="chain-node trigger">Inflation moderated as Intel and Nvidia fueled the AI trade in last week&#x27;s market - CNBC（黄金）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">避险需求推升金价，全球资金配置黄金资产</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股黄金板块（山东黄金、紫金矿业等）直接受益</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
+  <span class="chain-node trigger">航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
+  <span class="chain-node trigger">How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
+  <span class="chain-node trigger">How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
+  <span class="chain-node trigger">How consumers can get a refund for Trump tariffs struck down by Supreme Court - CBS News</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">地缘风险升温，全球避险情绪上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股军工、黄金板块受益，风险偏好下降</span>
+</div></div>
+</div>
+
+<!-- ═══ INDUSTRY RADAR ═══ -->
+<div class="sec">
+  <div class="sec-title">A股行业雷达 <span class="badge">Industry</span></div>
+  <div class="ind-grid"><div class="ind-cell pos">
+  <div class="ic-name">AI</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">9 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">半导体</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">5 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">消费</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">6 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">金融</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">5 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">新能源</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">黄金</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">2 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">医药</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">2 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">军工</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">1 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">房地产</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">1 条相关</div>
+</div></div>
+</div>
+
+<!-- ═══ SOURCE COVERAGE ═══ -->
+<div class="sec">
+  <div class="sec-title">数据源覆盖</div>
+  <div class="src-row"><span class="src-chip"><b>70</b>Google News</span><span class="src-chip"><b>45</b>新浪</span><span class="src-chip"><b>45</b>Yahoo Finance</span><span class="src-chip"><b>29</b>华尔街见闻</span><span class="src-chip"><b>20</b>同花顺</span><span class="src-chip"><b>15</b>东方财富</span></div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="ftr">
+  <div class="disclaimer">
+    本页面内容仅供参考，不构成任何投资建议。所有分析基于公开信息，可能存在滞后或偏差。
+    投资有风险，入市需谨慎。涉及的行业分析和产业链关联仅为信息整理，不代表对任何个股的推荐。
+  </div>
+  <p>Global Radar &copy; 2026-08-16</p>
+  <p style="margin-top:4px;opacity:.6">新浪 &ensp;/&ensp; 华尔街见闻 &ensp;/&ensp; 同花顺 &ensp;/&ensp; 东方财富 &ensp;/&ensp; Google News &ensp;/&ensp; Yahoo Finance</p>
+</div>
+
+</div>
+</body>
+</html>
