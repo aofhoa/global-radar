@@ -3,433 +3,1100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>A股资金流向 · 实时</title>
+<title>Global Radar | 2026-08-16</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh;color:#1a1816;line-height:1.7;font-size:14px;background:#f4f1ec;overflow-x:hidden}
-.bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;background:radial-gradient(ellipse 120% 80% at 15% 20%,rgba(200,185,165,.35) 0%,transparent 60%),radial-gradient(ellipse 100% 90% at 85% 75%,rgba(180,190,195,.3) 0%,transparent 55%),linear-gradient(160deg,#f4f1ec 0%,#ece8e1 40%,#e8e4dd 100%)}
-.bg-grain{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
-.glass{background:rgba(255,255,255,.55);backdrop-filter:blur(32px) saturate(1.3);-webkit-backdrop-filter:blur(32px) saturate(1.3);border:1px solid rgba(255,255,255,.6);border-radius:16px;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03)}
-.glass::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7) 30%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.7) 70%,transparent);pointer-events:none}
-.glass:hover{background:rgba(255,255,255,.6);box-shadow:0 2px 8px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.04)}
-.glass-strong{background:rgba(255,255,255,.65);backdrop-filter:blur(48px) saturate(1.4);-webkit-backdrop-filter:blur(48px) saturate(1.4);border:1px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 1px 4px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.04)}
-.glass-strong::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8) 25%,rgba(255,255,255,1) 50%,rgba(255,255,255,.8) 75%,transparent);pointer-events:none}
-.wrap{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:20px 28px 60px}
 
-/* Header */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:24px 28px;margin-bottom:24px;flex-wrap:wrap;gap:16px}
-.hdr-left h1{font-size:1.4em;font-weight:300;color:#1a1816;letter-spacing:2px;text-transform:uppercase}
+body{
+  font-family:"SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  min-height:100vh;color:#1a1816;line-height:1.7;font-size:15px;
+  background:#f4f1ec;
+  overflow-x:hidden;
+}
+
+/* ── Ambient Background ─────────────────── */
+.bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+  background:
+    radial-gradient(ellipse 120% 80% at 15% 20%, rgba(200,185,165,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 90% at 85% 75%, rgba(180,190,195,.3) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(210,195,180,.2) 0%, transparent 50%),
+    linear-gradient(160deg,#f4f1ec 0%,#ece8e1 40%,#e8e4dd 100%);
+}
+.bg-grain{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+
+/* ── Glass ──────────────────────────────── */
+.glass{
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(32px) saturate(1.3);
+  -webkit-backdrop-filter:blur(32px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;
+  position:relative;overflow:hidden;
+  transition:all .4s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03);
+}
+.glass::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,.7) 30%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.7) 70%,transparent 95%);
+  pointer-events:none;
+}
+.glass:hover{
+  background:rgba(255,255,255,.55);
+  box-shadow:0 2px 8px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.04);
+}
+.glass-strong{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(48px) saturate(1.4);
+  -webkit-backdrop-filter:blur(48px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:20px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.04);
+}
+.glass-strong::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,.8) 25%,rgba(255,255,255,1) 50%,rgba(255,255,255,.8) 75%,transparent 95%);
+  pointer-events:none;
+}
+
+/* ── Layout ─────────────────────────────── */
+.wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:24px 32px 80px}
+
+/* ── Header ─────────────────────────────── */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 32px;margin-bottom:32px;flex-wrap:wrap;gap:16px;
+}
+.hdr-left h1{
+  font-size:1.5em;font-weight:300;color:#1a1816;
+  letter-spacing:2px;text-transform:uppercase;
+}
 .hdr-left h1 strong{font-weight:600;letter-spacing:0}
-.hdr-left .sub{color:#5a5550;font-size:.82em;margin-top:4px;font-weight:300}
-.hdr-right{display:flex;gap:20px;align-items:center}
+.hdr-left .sub{
+  color:#5a5550;font-size:.82em;margin-top:6px;
+  font-weight:300;letter-spacing:.5px;
+}
+.hdr-right{display:flex;gap:32px;align-items:center}
 .hdr-stat{text-align:center}
-.hdr-stat .val{font-size:1.5em;font-weight:200;line-height:1.2}
-.hdr-stat .lbl{font-size:.62em;color:#6a6560;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+.hdr-stat .val{font-size:1.6em;font-weight:200;line-height:1.2;letter-spacing:-.5px}
+.hdr-stat .lbl{
+  font-size:.65em;color:#6a6560;text-transform:uppercase;
+  letter-spacing:2px;margin-top:3px;font-weight:400;
+}
 
-/* Live indicator */
-.live{display:flex;align-items:center;gap:6px;font-size:.78em;color:#6a6560}
-.live-dot{width:7px;height:7px;border-radius:50%;background:#b47355;animation:pulse 2s ease-in-out infinite}
-.live-dot.closed{background:#9a917e;animation:none}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
-.countdown{font-variant-numeric:tabular-nums;font-weight:500;color:#8a7e72;min-width:28px;text-align:center}
+/* ── Divider ────────────────────────────── */
+.divider{
+  height:1px;border:none;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.08) 20%,rgba(0,0,0,.08) 80%,transparent);
+  margin:0 0 32px;
+}
 
-.divider{height:1px;border:none;background:linear-gradient(90deg,transparent,rgba(0,0,0,.08) 20%,rgba(0,0,0,.08) 80%,transparent);margin:0 0 24px}
+/* ── Radar Grid ─────────────────────────── */
+.radar{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:36px}
+.rc{padding:28px}
+.rc .rc-label{
+  font-size:.65em;color:#6a6560;text-transform:uppercase;
+  letter-spacing:2.5px;margin-bottom:14px;font-weight:500;
+}
+.rc .rc-value{font-size:2.4em;font-weight:200;line-height:1;letter-spacing:-1px}
+.rc .rc-sub{font-size:.82em;color:#5a5550;margin-top:10px;font-weight:300;line-height:1.6;letter-spacing:.2px}
 
-/* Nav */
-.nav-bar{position:sticky;top:0;z-index:50;display:flex;gap:4px;padding:6px 8px;background:rgba(244,241,236,.85);backdrop-filter:blur(24px) saturate(1.3);border-bottom:1px solid rgba(255,255,255,.4);margin:-20px -28px 24px}
-.nav-link{padding:6px 14px;border-radius:8px;border:none;background:transparent;color:#7a7570;font-size:.78em;font-weight:500;cursor:pointer;transition:all .25s;font-family:inherit;letter-spacing:.3px}
+/* ── Gauge ──────────────────────────────── */
+.gauge{width:100%;height:3px;background:rgba(0,0,0,.06);border-radius:2px;margin-top:14px;overflow:hidden}
+.gauge-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.25,.46,.45,.94)}
+
+/* ── Section ────────────────────────────── */
+.sec{margin-bottom:40px}
+.sec-title{
+  font-size:.75em;font-weight:500;color:#6a6560;margin-bottom:20px;
+  text-transform:uppercase;letter-spacing:3px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-title .badge{
+  font-size:.8em;padding:2px 10px;border-radius:10px;font-weight:400;
+  background:rgba(0,0,0,.04);color:#6a6560;letter-spacing:1px;
+}
+
+/* ── Key Points ─────────────────────────── */
+.kp-list{display:flex;flex-direction:column;gap:8px}
+.kp-item{
+  display:flex;align-items:flex-start;gap:14px;padding:16px 22px;
+  font-size:.9em;font-weight:300;letter-spacing:.2px;
+}
+.kp-tag{
+  flex-shrink:0;padding:2px 8px;border-radius:4px;
+  font-size:.7em;font-weight:500;color:#fff;letter-spacing:.5px;
+}
+
+/* ── Event Cards ────────────────────────── */
+.ev{padding:28px;margin-bottom:12px}
+.ev-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.ev-rank{
+  font-size:1.1em;font-weight:200;color:#8a8279;min-width:32px;
+  font-variant-numeric:tabular-nums;letter-spacing:1px;
+}
+.ev-tag{
+  padding:3px 10px;border-radius:6px;font-size:.7em;font-weight:500;
+  color:#fff;letter-spacing:.5px;
+}
+.ev-score{font-weight:300;font-size:.9em;color:#5a524a;letter-spacing:.5px}
+.ev-score em{font-style:normal;font-weight:200;font-size:.6em;opacity:.6}
+.ev-stars{color:#a08a68;font-size:.8em;letter-spacing:3px}
+.ev-dir{font-size:.8em}
+.ev h3{
+  font-size:1em;font-weight:500;color:#1a1816;margin-bottom:8px;
+  line-height:1.6;letter-spacing:.1px;
+}
+.ev .summary{
+  color:#4a4540;font-size:.88em;margin-bottom:16px;
+  line-height:1.8;font-weight:300;
+}
+.ev-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.78em;color:#7a7570}
+.ev-meta a{color:#5a524a;font-size:.78em;transition:color .2s}
+.ev-meta a:hover{color:#2a2622;text-decoration:none}
+
+/* ── Chain ──────────────────────────────── */
+.chains{
+  margin:16px 0 12px;padding:18px 20px;border-radius:12px;
+  background:rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.04);
+}
+.chains .ch-label{
+  font-size:.62em;color:#7a7570;margin-bottom:12px;
+  text-transform:uppercase;letter-spacing:2.5px;font-weight:500;
+}
+.chain-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.86em}
+.chain-node{
+  padding:5px 14px;border-radius:8px;font-size:.88em;font-weight:400;
+  background:rgba(255,255,255,.5);
+  border:1px solid rgba(0,0,0,.06);
+  backdrop-filter:blur(8px);
+  transition:all .3s;letter-spacing:.2px;
+}
+.chain-node:hover{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.1)}
+.chain-node.trigger{border-color:rgba(138,126,114,.25);color:#6b6158;background:rgba(138,126,114,.06)}
+.chain-node.mid{border-color:rgba(160,140,120,.2);color:#8a7a68;background:rgba(160,140,120,.05)}
+.chain-node.impact{border-color:rgba(180,115,85,.3);color:#9a6e50;font-weight:500;background:rgba(180,115,85,.06)}
+.chain-arr{color:#a09890;font-size:1em}
+
+/* ── Industry Tags ──────────────────────── */
+.ind-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.ind-tag{
+  padding:4px 12px;border-radius:12px;font-size:.74em;font-weight:400;
+  border:1px solid;letter-spacing:.3px;
+  background:rgba(255,255,255,.3);
+  backdrop-filter:blur(6px);
+}
+
+/* ── Industry Grid ──────────────────────── */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.ind-cell{
+  padding:20px 16px;text-align:center;border-radius:14px;
+  background:rgba(255,255,255,.4);
+  backdrop-filter:blur(24px) saturate(1.2);
+  -webkit-backdrop-filter:blur(24px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.5);
+  position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 1px 3px rgba(0,0,0,.03);
+}
+.ind-cell::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6) 50%,transparent);
+}
+.ind-cell::after{
+  content:"";position:absolute;bottom:0;left:25%;right:25%;height:2px;border-radius:1px;
+  opacity:.5;transition:opacity .3s;
+}
+.ind-cell.pos::after{background:#b47355}
+.ind-cell.neg::after{background:#6b8f71}
+.ind-cell.neu::after{background:#9a917e}
+.ind-cell:hover{
+  background:rgba(255,255,255,.55);transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.03);
+}
+.ind-cell:hover::after{opacity:.8}
+.ind-cell .ic-name{font-weight:500;font-size:.88em;margin-bottom:6px;color:#1a1816;letter-spacing:.3px}
+.ind-cell .ic-dir{font-size:.78em;font-weight:400;letter-spacing:.5px}
+.ind-cell .ic-cnt{font-size:.68em;color:#7a7570;margin-top:4px;letter-spacing:.5px}
+
+/* ── Source Chips ───────────────────────── */
+.src-row{display:flex;flex-wrap:wrap;gap:8px}
+.src-chip{
+  padding:6px 16px;border-radius:20px;font-size:.8em;color:#5a5550;
+  background:rgba(255,255,255,.35);
+  border:1px solid rgba(255,255,255,.5);
+  backdrop-filter:blur(16px);
+  transition:all .3s;letter-spacing:.3px;
+}
+.src-chip:hover{background:rgba(255,255,255,.55);color:#2a2622}
+.src-chip b{color:#2a2622;margin-right:4px;font-weight:500}
+
+/* ── Footer ─────────────────────────────── */
+.ftr{
+  text-align:center;padding:40px 0 0;
+  color:#7a7570;font-size:.78em;letter-spacing:.5px;
+}
+.ftr .disclaimer{
+  padding:20px 24px;border-radius:14px;margin-bottom:24px;
+  font-size:.82em;color:#5a5550;line-height:1.8;font-weight:300;
+  background:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(16px);
+  letter-spacing:.2px;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:768px){
+  .wrap{padding:14px 16px 60px}
+  .hdr{flex-direction:column;align-items:flex-start;padding:20px 22px}
+  .radar{grid-template-columns:1fr 1fr}
+  .ind-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .hdr-left h1{font-size:1.2em}
+}
+@media(max-width:480px){
+  .radar{grid-template-columns:1fr}
+  .hdr-right{gap:20px}
+}
+
+/* ── Filter Tabs ────────────────────────── */
+.filter-bar{
+  display:flex;gap:6px;margin-bottom:24px;
+  background:rgba(255,255,255,.3);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:12px;padding:4px;
+  width:fit-content;
+}
+.filter-btn{
+  padding:8px 20px;border-radius:9px;border:none;
+  background:transparent;color:#7a7570;
+  font-size:.82em;font-weight:500;cursor:pointer;
+  transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  letter-spacing:.5px;font-family:inherit;
+}
+.filter-btn:hover{color:#3a3632;background:rgba(255,255,255,.4)}
+.filter-btn.active{
+  background:rgba(255,255,255,.7);color:#1a1816;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.event-section{display:none}
+.event-section.visible{display:block}
+
+/* ── Collapsible Cards ──────────────────── */
+.ev{cursor:pointer}
+.ev-details{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.25,.46,.45,.94),opacity .3s;
+  opacity:0;
+}
+.ev.expanded .evdetails{max-height:800px;opacity:1}
+.ev-toggle{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.75em;color:#a09890;margin-top:8px;
+  transition:color .2s;
+}
+.ev-toggle:hover{color:#5a524a}
+.ev-toggle svg{
+  width:12px;height:12px;transition:transform .3s;
+  fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;
+}
+.ev.expanded .ev-toggle svg{transform:rotate(180deg)}
+
+/* ── Back to Top ────────────────────────── */
+.to-top{
+  position:fixed;bottom:28px;right:28px;z-index:100;
+  width:44px;height:44px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(10px);
+  transition:all .3s cubic-bezier(.25,.46,.45,.94);
+  pointer-events:none;
+}
+.to-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.to-top:hover{background:rgba(255,255,255,.8);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.to-top svg{width:18px;height:18px;fill:none;stroke:#5a524a;stroke-width:2;stroke-linecap:round}
+
+/* ── Sticky Nav ─────────────────────────── */
+.nav-bar{
+  position:sticky;top:0;z-index:50;
+  display:flex;gap:4px;padding:6px 8px;
+  background:rgba(244,241,236,.8);
+  backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid rgba(255,255,255,.4);
+  margin:-24px -32px 24px;
+}
+.nav-link{
+  padding:6px 14px;border-radius:8px;border:none;
+  background:transparent;color:#8a8279;
+  font-size:.78em;font-weight:500;cursor:pointer;
+  transition:all .25s;font-family:inherit;letter-spacing:.3px;
+}
 .nav-link:hover{color:#3a3632;background:rgba(255,255,255,.4)}
 .nav-link.active{color:#1a1816;background:rgba(255,255,255,.5)}
-
-/* Summary */
-.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
-.sum-card{padding:22px}
-.sum-card .sc-label{font-size:.62em;color:#6a6560;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px;font-weight:500}
-.sum-card .sc-value{font-size:1.8em;font-weight:200;line-height:1.1;letter-spacing:-.5px}
-.sum-card .sc-sub{font-size:.8em;color:#5a5550;margin-top:8px;font-weight:300;line-height:1.6}
-
-/* Tabs */
-.filter-bar{display:flex;gap:6px;margin-bottom:20px;background:rgba(255,255,255,.3);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.5);border-radius:12px;padding:4px;width:fit-content}
-.filter-btn{padding:7px 18px;border-radius:9px;border:none;background:transparent;color:#7a7570;font-size:.8em;font-weight:500;cursor:pointer;transition:all .3s;font-family:inherit;letter-spacing:.5px}
-.filter-btn:hover{color:#3a3632;background:rgba(255,255,255,.4)}
-.filter-btn.active{background:rgba(255,255,255,.7);color:#1a1816;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.tab-content{display:none}.tab-content.visible{display:block}
-
-/* Tables */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
-.sec{margin-bottom:24px}
-.sec-title{font-size:.72em;font-weight:500;color:#6a6560;margin-bottom:12px;text-transform:uppercase;letter-spacing:3px;display:flex;align-items:center;gap:10px}
-.sec-title .badge{font-size:.8em;padding:2px 10px;border-radius:10px;background:rgba(0,0,0,.04);color:#6a6560;letter-spacing:1px}
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:.86em}
-thead th{padding:9px 10px;text-align:right;font-size:.68em;font-weight:500;color:#8a8279;text-transform:uppercase;letter-spacing:1.5px;border-bottom:1px solid rgba(0,0,0,.06);position:sticky;top:0;background:rgba(255,255,255,.85);backdrop-filter:blur(8px)}
-thead th:first-child{text-align:center}thead th:nth-child(2){text-align:left}
-tbody tr{border-bottom:1px solid rgba(0,0,0,.03);transition:background .2s}
-tbody tr:hover{background:rgba(255,255,255,.3)}
-tbody td{padding:9px 10px;text-align:right;vertical-align:middle}
-tbody td:first-child{text-align:center}tbody td:nth-child(2){text-align:left}
-
-/* Loading */
-.loading{text-align:center;padding:40px;color:#a09890;font-size:.9em}
-.loading .spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(0,0,0,.08);border-top-color:#8a7e72;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Back to top */
-.to-top{position:fixed;bottom:24px;right:24px;z-index:100;width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.6);box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
-.to-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
-.to-top svg{width:16px;height:16px;fill:none;stroke:#5a524a;stroke-width:2;stroke-linecap:round}
-
-.ftr{text-align:center;padding:32px 0 0;color:#7a7570;font-size:.76em;letter-spacing:.5px;margin-top:40px}
-.ftr .disclaimer{padding:14px 18px;border-radius:14px;margin-bottom:14px;font-size:.8em;color:#5a5550;line-height:1.7;font-weight:300;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(16px)}
 </style>
 </head>
 <body>
+
 <div class="bg"></div>
 <div class="bg-grain"></div>
+
 <div class="wrap">
 
-<!-- Header -->
+<!-- ═══ HEADER ═══ -->
 <div class="hdr glass-strong">
   <div class="hdr-left">
-    <h1>资金 <strong>流向</strong></h1>
-    <div class="sub">A股实时资金流向监控</div>
+    <h1>Global <strong>Radar</strong></h1>
+    <div class="sub">2026-08-16 &nbsp;&middot;&nbsp; 全球事件 &rarr; A股影响分析 &nbsp;&middot;&nbsp; 2026-08-16 11:55 UTC</div>
   </div>
   <div class="hdr-right">
-    <div class="live"><div class="live-dot" id="liveDot"></div><span id="marketStatus">检测中</span></div>
-    <div class="countdown" id="countdown" title="下次刷新">--</div>
-    <div class="hdr-stat"><div class="val" id="indCount">—</div><div class="lbl">行业</div></div>
-    <div class="hdr-stat"><div class="val" id="conCount">—</div><div class="lbl">概念</div></div>
-    <div class="hdr-stat"><div class="val" id="stkCount">—</div><div class="lbl">个股</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#b47355">6</div><div class="lbl">利好</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#9a917e">● 中性</div><div class="lbl">情绪</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#6b8f71">4</div><div class="lbl">利空</div></div>
+    <div class="hdr-stat"><div class="val" style="color:#8a8279">109</div><div class="lbl">事件</div></div>
   </div>
 </div>
+
 <hr class="divider">
 
-<!-- Nav -->
+<!-- ═══ STICKY NAV ═══ -->
 <div class="nav-bar">
-  <button class="nav-link active" onclick="navTo('overview',this)">概览</button>
-  <button class="nav-link" onclick="navTo('industry',this)">行业板块</button>
-  <button class="nav-link" onclick="navTo('concept',this)">概念板块</button>
-  <button class="nav-link" onclick="navTo('stock',this)">个股</button>
+  <button class="nav-link active" onclick="scrollTo('#radar-section')">概览</button>
+  <button class="nav-link" onclick="scrollTo('#events-section')">事件</button>
+  <button class="nav-link" onclick="scrollTo('#chains-section')">传导链</button>
+  <button class="nav-link" onclick="scrollTo('#industry-section')">行业</button>
 </div>
 
-<!-- Summary -->
-<div class="summary-grid" id="overview">
-  <div class="sum-card glass">
-    <div class="sc-label">行业净流入 TOP3</div>
-    <div class="sc-value" id="topInflow" style="color:#b47355">—</div>
-    <div class="sc-sub" id="topInflowDetail">加载中...</div>
+<!-- ═══ MARKET RADAR ═══ -->
+<div class="radar" id="radar-section">
+  <div class="rc glass">
+    <div class="rc-label">全球环境</div>
+    <div class="rc-value" style="color:#9a917e">● 中性</div>
+    <div class="rc-sub">利好 6 &ensp;/&ensp; 利空 4 &ensp;/&ensp; 中性 20</div>
   </div>
-  <div class="sum-card glass">
-    <div class="sc-label">行业净流出 TOP3</div>
-    <div class="sc-value" id="topOutflow" style="color:#6b8f71">—</div>
-    <div class="sc-sub" id="topOutflowDetail">加载中...</div>
+  <div class="rc glass">
+    <div class="rc-label">风险指数</div>
+    <div class="rc-value" style="color:#9a917e">50</div>
+    <div class="gauge"><div class="gauge-fill" style="width:50%;background:#9a917e"></div></div>
+    <div class="rc-sub">0 安全 &ensp;&middot;&ensp; 50 警戒 &ensp;&middot;&ensp; 100 危机</div>
   </div>
-  <div class="sum-card glass">
-    <div class="sc-label">更新时间</div>
-    <div class="sc-value" id="updateTime" style="font-size:1.4em;color:#8a7e72">—</div>
-    <div class="sc-sub" id="refreshInfo">每60秒自动刷新</div>
+  <div class="rc glass">
+    <div class="rc-label">今日变量</div>
+    <div class="rc-sub" style="margin-top:10px;line-height:1.9;color:#4a4540">
+      1. [利空] 国泰海通：中国股市将逐步迎来“金秋行情” 积极部署<br>2. [中性] 新华财经周报：8月10日至8月16日<br>3. [偏利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡
+    </div>
   </div>
 </div>
 
-<!-- Filter Tabs -->
+<!-- ═══ KEY POINTS ═══ -->
+<div class="sec"><div class="sec-title">今日要点</div><div class="kp-list"><div class="kp-item glass"><span class="kp-tag" style="background:#6b8f71">利空</span><span>[利空] 国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 新华财经周报：8月10日至8月16日</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#6b8f71">利空</span><span>[偏利空] 新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span></div>
+<div class="kp-item glass"><span class="kp-tag" style="background:#9a917e">中性</span><span>[中性] 事关A股，多个大事，就在下周</span></div>
+</div></div>
+
+<!-- ═══ EVENTS SECTION ═══ -->
+<div id="events-section">
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="switchTab('industry',this)">行业板块</button>
-  <button class="filter-btn" onclick="switchTab('concept',this)">概念板块</button>
-  <button class="filter-btn" onclick="switchTab('stock',this)">个股</button>
+  <button class="filter-btn active" onclick="filterEvents('all',this)">全部</button>
+  <button class="filter-btn" onclick="filterEvents('domestic',this)">国内</button>
+  <button class="filter-btn" onclick="filterEvents('global',this)">全球</button>
 </div>
 
-<!-- Industry Tab -->
-<div class="tab-content visible" id="tab-industry" data-tab="industry">
-  <div class="grid-2">
-    <div class="sec">
-      <div class="sec-title">主力净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="ind-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
-    <div class="sec">
-      <div class="sec-title">主力净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="ind-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
+<div class="event-section visible" data-filter="domestic">
+  <div class="sec">
+    <div class="sec-title">国内事件 <span class="badge">Domestic</span></div>
+    <div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">1</span>
+    <span class="ev-tag" style="background:#6b8f71">利空</span>
+    <span class="ev-score">6.3<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#6b8f71">&#9660;</span>
+  </div>
+  <h3>国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</h3>
+  <div class="summary">国泰海通策略认为，从基本点看，无风险利率下降、资本市场制度改革与经济结构转型，中国市场有较强承托力，“转型牛”的历史进程不会就此前挫折结束。对于后市，我们认为中国股市将逐步迎来“金秋行情”，积极部署。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150059" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">2</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">6.0<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>新华财经周报：8月10日至8月16日</h3>
+  <div class="summary">·商务部：对原产于印度的进口单模光纤续征反倾销税·《煤炭工业发展“十五五”规划》发布2030年全国大型现代化煤矿产能比重提升至87%·自8月14日24时起国内汽、柴油价格每吨分别下调230元、220元·中国人民银行：加强对扩大内需、科技创新、中小微企业等重点领域的金融支持·7月金融数据出炉！</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">新华财经周报：8月10日至8月16日（原油）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">原油价格波动影响全球能源成本</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股石油石化板块（中国石油、中国石化）受影响，化工板块成本端传导</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">石油石化</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="http://finance.eastmoney.com/a/202608163842514088.html" target="_blank" rel="noopener">东方财富</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">3</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.7<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</h3>
+  <div class="summary">【航行警告！渤海海峡黄海北部执行军事任务 禁止驶入】据中国海事局网站消息，大连海事局发布航行警告，8月16日16时至30日16时，渤海海峡黄海北部部分海域执行军事任务，禁止驶入。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">军工</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="http://finance.eastmoney.com/a/202608163842501524.html" target="_blank" rel="noopener">东方财富</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">4</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.6<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>事关A股，多个大事，就在下周</h3>
+  <div class="summary">下周，70城房价数据、社零数据等多个重要数据将发布，最新一期LPR将公布，A股年内最贵新股频准激光将上市，兆易创新、天孚通信、恒瑞医药、中微公司、科大讯飞等多家A股龙头公司将发布2026年上半年业绩。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">事关A股，多个大事，就在下周</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">重要公司动态引发行业关注</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关个股及板块可能联动</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">房地产</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">医药</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="http://finance.eastmoney.com/a/202608163842516157.html" target="_blank" rel="noopener">东方财富</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">5</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>美媒：中国成为全球企业“绕不开的技术和创新来源”</h3>
+  <div class="summary">美国消费者新闻与商业频道（CNBC）近日刊文称，中国企业正在成为全球企业“绕不开的技术和创新来源”。分析人士认为，尽管美国持续加码对华科技限制，但从人工智能到电动车电池，中国技术仍日益融入一些全球大型企业的业务。分析认为，中国技术崛起正在从低成本制造转向依靠规模优势、深厚的供应链能力以及快速创新能力，全球产业链与创新格局正发生结构性变化。（新华社）</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">美媒：中国成为全球企业“绕不开的技术和创新来源”</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">新能源</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.10jqka.com.cn/20260816/c678986355.shtml" target="_blank" rel="noopener">同花顺</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">6</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>段永平、李录最新调仓曝光</h3>
+  <div class="summary">近期美股机构投资者二季度13F持仓密集披露，知名投资人段永平、李录最新调仓路径随之曝光。 段永平继续加仓拼多多 大幅减持英伟达、谷歌 据券商中国报道...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">段永平、李录最新调仓曝光</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/wm/2026-08-16/doc-ininnzcp7741422.shtml" target="_blank" rel="noopener">21世纪经济报道</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">7</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>英国7月通胀料回升至2.9% 英国央行警惕AI芯片与能源双重冲击</h3>
+  <div class="summary">未来一周，英国消费者物价数据将成为市场焦点。受人工智能引发的存储芯片短缺、能源成本走高影响，英国央行将保持警惕。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">英国7月通胀料回升至2.9% 英国央行警惕AI芯片与能源双重冲击</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国经济数据反映国内经济基本面</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">直接影响A股大盘走势，相关板块估值调整</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">AI</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">半导体</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnkfv8014779.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">8</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.2<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>股票型ETF周净流出近600亿 中证1000净流出金额最高</h3>
+  <div class="summary">数据显示，8月10日-8月14日当周，全市场股票型ETF的资金净流出金额达596.54亿元。宽基ETF是本轮资金流出的核心主力，合计净流出超424亿元。其中，中证1000相关ETF净流出最多，上周净流出金额为141.76亿元，最新规模合计为438.84亿元；沪深300相关ETF净流出同样超百亿，上周净流出金额为110.16亿元，最新规模合计为2749.28亿元。此外，中证500相关ETF、创业板指相关ETF、中证2000相关ETF、中证A500相关ETF、科创50相关ETF上周分别净流出金额达51.06亿元、35.49亿元、20.81亿元、18.1亿元、10.15亿元。（财联社）</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">股票型ETF周净流出近600亿 中证1000净流出金额最高</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.10jqka.com.cn/20260816/c678986651.shtml" target="_blank" rel="noopener">同花顺</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">9</span>
+    <span class="ev-tag" style="background:#c4956e">偏利好</span>
+    <span class="ev-score">5.1<em>/10</em></span>
+    <span class="ev-stars" title="单一可靠">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#b47355">&#9650;</span>
+  </div>
+  <h3>紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%</h3>
+  <div class="summary">紫金黄金国际发布截至2026年6月30日止6个月中期业绩，该集团取得收入39.87亿美元，同比增加99.67%;母公司拥有人应占溢利14.51亿美元，同比增加178.83%;每股盈利0.54美元；拟派中期股息每股1.5港元。公告称，矿山运营方面，2026年上半年，本集团矿产金产量约27.3吨，其中控股矿山产量约26.0吨，同比增长约37%;黄金销量约为26.1吨，平均售价约为每盎司4643美元。成熟资产整体稳定运行，武里蒂卡金矿、罗斯贝尔金矿、左岸金矿及奥罗拉金矿均实现同比增产;而于2025年4月及10月分别完成收购的加纳阿基姆金矿和哈萨克斯坦瑞果多金矿已全面融入本集团的运营体系，成为产量及盈利增长的重要驱动。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">重要公司动态引发行业关注</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关个股及板块可能联动</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">紫金黄金国际：上半年母公司拥有人应占溢利约14.5亿美元 同比增长179%（黄金）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">避险需求推升金价，全球资金配置黄金资产</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股黄金板块（山东黄金、紫金矿业等）直接受益</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">黄金</span></div>
+  <div class="ev-meta">
+    <span>2 源 &middot; 2 篇</span>
+    <a href="https://wallstreetcn.com/live/3150057" target="_blank" rel="noopener">华尔街见闻</a> <a href="https://news.10jqka.com.cn/20260816/c678986617.shtml" target="_blank" rel="noopener">同花顺</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">10</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.1<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查</h3>
+  <div class="summary">华联控股公告称，公司收到加拿大外国投资审查及经济安全主管机构(FIRES)出具的《通知函》，认为公司对阿根廷阿里扎罗锂盐湖项目的投资可能影响加拿大国家安全，可能启动进一步审查。公司以约1.75亿美元受让ArgentumLithiumS.A.100%股份，获得该项目80%权益。公司暂无法评估此通知函可能产生的影响，本次交易能否最终通过审查存在不确定性。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">华联控股：收到加拿大FIRES通知函 阿根廷锂盐湖项目投资可能触发审查（锂）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">锂价波动反映新能源产业链供需</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股锂电池板块（天齐锂业、赣锋锂业）直接联动</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150047" target="_blank" rel="noopener">华尔街见闻</a> 
   </div>
 </div>
 
-<!-- Concept Tab -->
-<div class="tab-content" id="tab-concept" data-tab="concept">
-  <div class="grid-2">
-    <div class="sec">
-      <div class="sec-title">概念净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="con-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
-    <div class="sec">
-      <div class="sec-title">概念净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="con-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
   </div>
 </div>
 
-<!-- Stock Tab -->
-<div class="tab-content" id="tab-stock" data-tab="stock">
-  <div class="grid-2">
-    <div class="sec">
-      <div class="sec-title">个股净流入 TOP 20 <span class="badge">Inflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="stk-in"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
-    <div class="sec">
-      <div class="sec-title">个股净流出 TOP 20 <span class="badge">Outflow</span></div>
-      <div class="glass" style="padding:4px 0"><div class="tbl-wrap" id="stk-out"><div class="loading"><span class="spinner"></span>加载中...</div></div></div>
-    </div>
+<div class="event-section visible" data-filter="global">
+  <div class="sec">
+    <div class="sec-title">全球事件 <span class="badge">Global</span></div>
+    <div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">1</span>
+    <span class="ev-tag" style="background:#7da07f">偏利空</span>
+    <span class="ev-score">5.8<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#6b8f71">&#9660;</span>
+  </div>
+  <h3>新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</h3>
+  <div class="summary">本周美股各大指数表现分化，标普500迎来7800点里程碑的同时道指结束周线两连阳。美国通胀数据叠加零售销售下滑，提升了美联储9月暂停加息的概率；与此同时...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span><span class="ind-tag" style="border-color:#b47355;color:#b47355">消费</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/jjxw/2026-08-16/doc-ininnqpt7938616.shtml" target="_blank" rel="noopener">一财网</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">2</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">5.4<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>普京登俄日争议岛屿明确宣示主权</h3>
+  <div class="summary">俄罗斯总统普京日前首次登上俄日争议岛屿——俄称南千岛群岛（日本称北方四岛）的伊图鲁普岛（日本称择捉岛）。此举引发日本方面的强烈抗议。日本首相高市早苗称，北方四岛是日本的“固有领土”，对普京此举“绝对无法接受”。由于在岛屿归属问题上存在争议，俄日在二战结束后至今未缔结和平条约。中国社科院日本研究所助理研究员孟明铭分析表示，普京以现任总统身份首次登上俄日争议岛屿，并视察当地日常生活，这本身就是高度政治化的信号。在俄罗斯看来，这些岛屿已经不是争议领土，普京是用实际行动否定了这里存在主权争议。中国社会科学院俄罗斯东欧中亚研究所研究员张弘也表示，普京此行向外证明，俄罗斯依然保有维护远东领土与海上安全的能力，打破西方炒作“俄军深陷乌克兰危机，无瑕顾及远东”的西方外交叙事，告诉日本及其盟友，俄罗斯有能力兼顾东西两线安全。（CCTV国际时讯）</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">普京登俄日争议岛屿明确宣示主权</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">普京登俄日争议岛屿明确宣示主权</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">地缘冲突影响能源和粮食供应</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股能源、有色金属板块波动，避险资产受追捧</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.10jqka.com.cn/20260816/c678986268.shtml" target="_blank" rel="noopener">同花顺</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">3</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.8<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>美国史无前例 特朗普家族加密企业World Liberty获银行牌照</h3>
+  <div class="summary">美国货币监理署（OCC）近日有条件批准特朗普家族关联的加密企业World Liberty Trust Co．设立银行牌照，使其能够直接发行与美元挂钩的稳定币。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">美国史无前例 特朗普家族加密企业World Liberty获银行牌照</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国政策变化影响中美经贸关系</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关产业链受直接影响，国产替代概念活跃</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 2 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvp1462590.shtml" target="_blank" rel="noopener">环球市场播报</a> <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnqpu9880058.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">4</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.6<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>伯克希尔二季度持仓曝光：重仓Alphabet近380亿美元，家建股同步加码</h3>
+  <div class="summary">伯克希尔·哈撒韦（Berkshire Hathaway）最新披露的二季度投资组合显示，该公司显著增持了谷歌母公司Alphabet的股份，并持续加码美国住宅建筑板块。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">伯克希尔二季度持仓曝光：重仓Alphabet近380亿美元，家建股同步加码</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvq1081660.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">5</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>伊朗称逮捕或消灭美军者将获奖励</h3>
+  <div class="summary">伊朗陆军总司令哈塔米今天（8月16日）发表声明称，任何逮捕或消灭一名入境美国军人的伊朗人员，都将获得50亿土曼（约合3万美元）的悬赏奖励。 (CCTV国际时讯)</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">伊朗称逮捕或消灭美军者将获奖励</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150063" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">6</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.5<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>美媒：美从西太平洋撤出最后一艘航母</h3>
+  <div class="summary">美国总统唐纳德·特朗普对伊朗的战争正在挑战美国航空母舰的极限，并使西太平洋没有一艘这种关键的美国军舰。在对“亚伯拉罕·林肯”号这艘长期部署的航空母舰上官兵的心理健康和补给问题的担忧日益加剧之际，“乔治·华盛顿”号航空母舰即将离开太平洋，预计将取代目前在中东的“林肯”号。最初计划于5月返航的“林肯”号的在航时间已经延长，以支持对伊朗的行动。如果美国海军在未来数月部署另一艘航母，那么，美国在太平洋没有航母的局面可能是短暂的。但分析人士表示，这表明，在特朗普政府进一步从亚太地区抽身、把重点放在西半球之际，对伊朗的无限期行动已让一些美国水兵精疲力尽。（参考消息）</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">美媒：美从西太平洋撤出最后一艘航母</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">地缘风险升温，全球避险情绪上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股军工、黄金板块受益，风险偏好下降</span>
+</div><div class="chain-row">
+  <span class="chain-node trigger">美媒：美从西太平洋撤出最后一艘航母</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中东局势紧张，原油供应风险上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股石油石化板块受关注，化工成本端承压</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">军工</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://news.10jqka.com.cn/20260816/c678986527.shtml" target="_blank" rel="noopener">同花顺</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">7</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.4<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>特朗普家族旗舰加密企业获信托银行初步牌照，可自主发行与托管40亿美元稳定币</h3>
+  <div class="summary">特朗普家族旗舰加密企业World Liberty Financial周五宣布，其信托公司已获得美国货币监理署（OCC）有条件初步批准，成为银行。最终获批后...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">特朗普家族旗舰加密企业获信托银行初步牌照，可自主发行与托管40亿美元稳定币</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"><span class="ind-tag" style="border-color:#b47355;color:#b47355">金融</span></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnuvq1085110.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">8</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.2<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>特朗普再促参议院通过全年采用夏令时法案</h3>
+  <div class="summary">美国总统特朗普15日在社交媒体再度发文，敦促国会参议院尽快表决通过全年采用夏令时的相关法案。特朗普说，参议院“必须尽快投票”，并“把它办成”。他说，一天中较晚时段有更多阳光会更好，包括有助于打击犯罪，但更重要的是，别再每年两次调整时钟和手表了，这带来的全是干扰和混乱。此前，特朗普4日在社交媒体发文，敦促国会参议院尽快通过全年采用夏令时的相关法案，称绝大多数美国人都要求将夏令时永久化。（央视新闻）</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">特朗普再促参议院通过全年采用夏令时法案</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://wallstreetcn.com/live/3150053" target="_blank" rel="noopener">华尔街见闻</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">9</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">4.2<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>民调：超半数美国选民称生活境况恶化，民主党在经济就业议题获得更多选民信任</h3>
+  <div class="summary">一项民调显示，多数美国选民表示自身生活境况在特朗普执政期间出现恶化，民众对总统处理经济、生活成本问题的不满情绪持续攀升。</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">民调：超半数美国选民称生活境况恶化，民主党在经济就业议题获得更多选民信任</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/stock/usstock/c/2026-08-16/doc-ininnqps1158228.shtml" target="_blank" rel="noopener">环球市场播报</a> 
+  </div>
+</div>
+<div class="ev glass">
+  <div class="ev-top">
+    <span class="ev-rank">10</span>
+    <span class="ev-tag" style="background:#9a917e">中性</span>
+    <span class="ev-score">3.9<em>/10</em></span>
+    <span class="ev-stars" title="未确认">&#9733;&#9733;&#9734;&#9734;&#9734;</span>
+    <span class="ev-dir" style="color:#9a917e">&#9679;</span>
+  </div>
+  <h3>SpaceX上市造富高校圈：哈佛持22亿美元股份领跑</h3>
+  <div class="summary">近日，哈佛大学旗下投资管理机构哈佛管理公司（Harvard Management Company， HMC）向美国证券交易委员会提交了13F季度持仓报告；报告显示，截至2026年二季度末...</div>
+  <div class="chains"><div class="ch-label">传导路径</div><div class="chain-row">
+  <span class="chain-node trigger">SpaceX上市造富高校圈：哈佛持22亿美元股份领跑</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+  <div class="ind-tags"></div>
+  <div class="ev-meta">
+    <span>1 源 &middot; 1 篇</span>
+    <a href="https://finance.sina.com.cn/jjxw/2026-08-16/doc-ininnqps1152773.shtml" target="_blank" rel="noopener">界面</a> 
   </div>
 </div>
 
-<!-- Footer -->
+  </div>
+</div>
+</div>
+
+<!-- ═══ CAUSAL CHAINS ═══ -->
+<div id="chains-section"><div class="sec">
+  <div class="sec-title">事件传导链 <span class="badge">Chain</span></div>
+  <div class="glass-strong" style="padding:28px"><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">1</span>
+  <span class="chain-node trigger">国泰海通：中国股市将逐步迎来“金秋行情” 积极部署</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">主要央行政策变化影响全球流动性环境</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股市场资金面和情绪面受影响</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">2</span>
+  <span class="chain-node trigger">新华财经周报：8月10日至8月16日（原油）</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">原油价格波动影响全球能源成本</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股石油石化板块（中国石油、中国石化）受影响，化工板块成本端传导</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美元走强，全球资本回流美国，新兴市场资金外流压力加大</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股金融板块承压，北向资金可能净流出，人民币贬值风险上升</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">3</span>
+  <span class="chain-node trigger">新一轮波动风险酝酿中？“恐慌指数”跌至年内低位，科技股高位震荡</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">美国经济基本面变化影响全球风险偏好</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股外资流向变化，相关产业链情绪传导</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">4</span>
+  <span class="chain-node trigger">航行警告！渤海海峡黄海北部执行军事任务 禁止驶入</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">中国面临地缘政治压力，市场不确定性上升</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股短期承压，自主可控概念受关注</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">5</span>
+  <span class="chain-node trigger">事关A股，多个大事，就在下周</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">重要公司动态引发行业关注</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关个股及板块可能联动</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">6</span>
+  <span class="chain-node trigger">美媒：中国成为全球企业“绕不开的技术和创新来源”</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div><div class="chain-row" style="margin-bottom:10px">
+  <span style="color:#c5bdb3;font-weight:300;min-width:24px;font-size:.85em">7</span>
+  <span class="chain-node trigger">段永平、李录最新调仓曝光</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node mid">全球市场信息传导，投资者情绪调整</span>
+  <span class="chain-arr">&rarr;</span>
+  <span class="chain-node impact">A股相关板块可能受到间接影响</span>
+</div></div>
+</div></div>
+
+<!-- ═══ INDUSTRY RADAR ═══ -->
+<div class="sec" id="industry-section">
+  <div class="sec-title">A股行业雷达 <span class="badge">Industry</span></div>
+  <div class="ind-grid"><div class="ind-cell pos">
+  <div class="ic-name">AI</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">8 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">金融</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">8 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">黄金</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">半导体</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">消费</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">医药</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">3 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">军工</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">2 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">石油石化</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">1 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">房地产</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">1 条相关</div>
+</div><div class="ind-cell pos">
+  <div class="ic-name">新能源</div>
+  <div class="ic-dir" style="color:#b47355">利好</div>
+  <div class="ic-cnt">1 条相关</div>
+</div></div>
+</div>
+
+<!-- ═══ SOURCE COVERAGE ═══ -->
+<div class="sec">
+  <div class="sec-title">数据源覆盖</div>
+  <div class="src-row"><span class="src-chip"><b>49</b>新浪</span><span class="src-chip"><b>30</b>华尔街见闻</span><span class="src-chip"><b>17</b>东方财富</span><span class="src-chip"><b>17</b>同花顺</span></div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
 <div class="ftr">
-  <div class="disclaimer">数据来源: 东方财富公开接口，仅供参考。资金流向为实时统计，不代表机构真实持仓。不构成投资建议，投资有风险。</div>
-  <p>A股资金流向监控 · 实时版</p>
+  <div class="disclaimer">
+    本页面内容仅供参考，不构成任何投资建议。所有分析基于公开信息，可能存在滞后或偏差。
+    投资有风险，入市需谨慎。涉及的行业分析和产业链关联仅为信息整理，不代表对任何个股的推荐。
+  </div>
+  <p>Global Radar &copy; 2026-08-16</p>
+  <p style="margin-top:4px;opacity:.6">新浪 &ensp;/&ensp; 华尔街见闻 &ensp;/&ensp; 同花顺 &ensp;/&ensp; 东方财富 &ensp;/&ensp; Google News &ensp;/&ensp; Yahoo Finance</p>
 </div>
+
 </div>
 
 <!-- Back to Top -->
-<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'}')">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <script>
-// ── Config ────────────────────────────────────────────────────
-const REFRESH_INTERVAL = 60; // seconds
-const API_BASE = 'https://push2.eastmoney.com/api/qt/clist/get';
-const FIELDS = 'f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f124,f204,f205';
-let countdown = REFRESH_INTERVAL;
-let isMarketOpen = false;
-
-// ── JSONP ─────────────────────────────────────────────────────
-let jsonpCounter = 0;
-function jsonp(url) {
-  return new Promise((resolve, reject) => {
-    const cbName = 'jsonp_cb_' + (++jsonpCounter) + '_' + Date.now();
-    const script = document.createElement('script');
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error('timeout'));
-    }, 8000);
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-    window[cbName] = (data) => { cleanup(); resolve(data); };
-    script.src = url + (url.includes('?') ? '&' : '?') + 'cb=' + cbName;
-    script.onerror = () => { cleanup(); reject(new Error('load error')); };
-    document.head.appendChild(script);
-  });
-}
-
-// ── Data Fetching ─────────────────────────────────────────────
-function buildUrl(fs, pz, po) {
-  return `${API_BASE}?pn=1&pz=${pz}&po=${po}&np=1&fltt=2&invt=2&fid=f62&fs=${fs}&fields=${FIELDS}`;
-}
-
-async function fetchAll() {
-  const queries = [
-    { id: 'ind-in',  url: buildUrl('m:90+t:2', 20, 0), isStock: false },
-    { id: 'ind-out', url: buildUrl('m:90+t:2', 20, 1), isStock: false },
-    { id: 'con-in',  url: buildUrl('m:90+t:3', 20, 0), isStock: false },
-    { id: 'con-out', url: buildUrl('m:90+t:3', 20, 1), isStock: false },
-    { id: 'stk-in',  url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 20, 0), isStock: true },
-    { id: 'stk-out', url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 20, 1), isStock: true },
-    // Extra: full counts
-    { id: '_ind_total', url: buildUrl('m:90+t:2', 1, 0) },
-    { id: '_con_total', url: buildUrl('m:90+t:3', 1, 0) },
-    { id: '_stk_total', url: buildUrl('m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', 1, 0) },
-  ];
-
-  const results = await Promise.allSettled(queries.map(q => jsonp(q.url)));
-  
-  results.forEach((r, i) => {
-    const q = queries[i];
-    if (r.status === 'fulfilled' && r.value) {
-      const data = r.value.data;
-      if (q.id.startsWith('_')) {
-        // Just need total count
-        const countEl = q.id === '_ind_total' ? 'indCount' : q.id === '_con_total' ? 'conCount' : 'stkCount';
-        document.getElementById(countEl).textContent = data?.total || '—';
-      } else {
-        const items = data?.diff || [];
-        renderTable(q.id, items, q.isStock);
-      }
-    }
-  });
-
-  updateSummary();
-}
-
-// ── Formatting ────────────────────────────────────────────────
-function fmtAmt(v) {
-  if (v === null || v === undefined || v === '-') return '—';
-  const n = parseFloat(v);
-  if (isNaN(n)) return '—';
-  const yi = n / 1e8;
-  const sign = yi > 0 ? '+' : '';
-  return Math.abs(yi) >= 1 ? `${sign}${yi.toFixed(2)}亿` : `${sign}${(n/1e4).toFixed(0)}万`;
-}
-
-function fmtPct(v) {
-  if (v === null || v === undefined || v === '-') return '—';
-  const n = parseFloat(v);
-  if (isNaN(n)) return '—';
-  return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
-}
-
-function clr(v) {
-  const n = parseFloat(v);
-  return isNaN(n) || n === 0 ? '#9a917e' : n > 0 ? '#b47355' : '#6b8f71';
-}
-
-function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-
-// ── Render Table ──────────────────────────────────────────────
-function renderTable(containerId, items, isStock) {
-  const el = document.getElementById(containerId);
-  if (!items.length) { el.innerHTML = '<div style="padding:20px;color:#7a7570;text-align:center">暂无数据</div>'; return; }
-
-  let html = '<table><thead><tr><th>#</th><th>' + (isStock ? '个股' : '板块') + '</th><th>最新</th><th>涨跌%</th><th>主力净流入</th><th>净占比</th><th>超大单</th><th>大单</th>' + (isStock ? '' : '<th>领涨股</th>') + '</tr></thead><tbody>';
-  
-  items.forEach((item, i) => {
-    const rank = i + 1;
-    const rc = rank <= 3 ? '#b47355' : rank <= 5 ? '#8a7e72' : '#a09890';
-    const rw = rank <= 5 ? '500' : '300';
-    const name = esc(item.f14 || '');
-    const code = esc(item.f12 || '');
-    const price = parseFloat(item.f2) || 0;
-    const change = item.f3;
-    const mainNet = item.f62;
-    const mainPct = item.f184;
-    const superNet = item.f66;
-    const bigNet = item.f72;
-    const lead = esc(item.f204 || '');
-
-    try {
-      const mv = parseFloat(mainNet) / 1e8;
-      const bw = Math.min(Math.abs(mv) * 2, 100);
-      const bc = mv > 0 ? '#b47355' : '#6b8f71';
-      const bd = mv > 0 ? 'right' : 'left';
-      
-      html += `<tr>
-        <td style="text-align:center;color:${rc};font-weight:${rw}">${rank}</td>
-        <td><div style="font-weight:500;color:#1a1816">${name}</div><div style="font-size:.68em;color:#a09890">${code}</div></td>
-        <td style="text-align:right;font-variant-numeric:tabular-nums">${price ? price.toFixed(2) : '—'}</td>
-        <td style="text-align:right;color:${clr(change)};font-weight:500;font-variant-numeric:tabular-nums">${fmtPct(change)}</td>
-        <td style="text-align:right"><div style="color:${clr(mainNet)};font-weight:500;font-variant-numeric:tabular-nums">${fmtAmt(mainNet)}</div><div style="height:3px;border-radius:2px;margin-top:3px;background:#e8e4dd;overflow:hidden"><div style="width:${bw}%;height:100%;background:${bc};border-radius:2px;float:${bd}"></div></div></td>
-        <td style="text-align:right;color:#7a7570;font-size:.83em;font-variant-numeric:tabular-nums">${fmtPct(mainPct)}</td>
-        <td style="text-align:right;font-size:.83em;color:#8a8279;font-variant-numeric:tabular-nums">${fmtAmt(superNet)}</td>
-        <td style="text-align:right;font-size:.83em;color:#8a8279;font-variant-numeric:tabular-nums">${fmtAmt(bigNet)}</td>
-        ${isStock ? '' : `<td style="font-size:.78em;color:#a09890">${lead}</td>`}
-      </tr>`;
-    } catch(e) {}
-  });
-  
-  html += '</tbody></table>';
-  el.innerHTML = html;
-}
-
-// ── Summary Update ────────────────────────────────────────────
-function updateSummary() {
-  const now = new Date();
-  const h = now.getHours(), m = now.getMinutes();
-  const timeStr = now.toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-  document.getElementById('updateTime').textContent = timeStr;
-
-  // Market hours check (9:15-15:05 Beijing time, Mon-Fri)
-  const day = now.getDay();
-  isMarketOpen = day >= 1 && day <= 5 && ((h === 9 && m >= 15) || (h > 9 && h < 15) || (h === 15 && m <= 5));
-  const dot = document.getElementById('liveDot');
-  const status = document.getElementById('marketStatus');
-  if (isMarketOpen) {
-    dot.classList.remove('closed');
-    status.textContent = '盘中';
-  } else if (h >= 15 && h < 17) {
-    dot.classList.add('closed');
-    status.textContent = '已收盘';
-  } else if (h < 9 || (h === 9 && m < 15)) {
-    dot.classList.add('closed');
-    status.textContent = '盘前';
-  } else {
-    dot.classList.add('closed');
-    status.textContent = '已收盘';
-  }
-
-  // Top 3 inflow/outflow from industry table
-  const indInEl = document.getElementById('ind-in');
-  const rows = indInEl.querySelectorAll('tbody tr');
-  if (rows.length >= 3) {
-    const names = [];
-    for (let i = 0; i < 3; i++) {
-      const nameEl = rows[i].querySelector('td:nth-child(2) div:first-child');
-      if (nameEl) names.push(nameEl.textContent);
-    }
-    document.getElementById('topInflow').textContent = names.join(' · ') || '—';
-  }
-
-  const indOutEl = document.getElementById('ind-out');
-  const rowsOut = indOutEl.querySelectorAll('tbody tr');
-  if (rowsOut.length >= 3) {
-    const names = [];
-    for (let i = 0; i < 3; i++) {
-      const nameEl = rowsOut[i].querySelector('td:nth-child(2) div:first-child');
-      if (nameEl) names.push(nameEl.textContent);
-    }
-    document.getElementById('topOutflow').textContent = names.join(' · ') || '—';
-  }
-}
-
-// ── Tab Switching ─────────────────────────────────────────────
-function switchTab(tab, btn) {
+// Filter tabs
+function filterEvents(type, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(el => {
-    el.classList.toggle('visible', el.dataset.tab === tab);
+  document.querySelectorAll('.event-section').forEach(sec => {
+    if (type === 'all') {
+      sec.classList.add('visible');
+    } else {
+      sec.classList.toggle('visible', sec.dataset.filter === type);
+    }
   });
 }
 
-function navTo(id, btn) {
-  const el = document.getElementById(id === 'overview' ? 'overview' : 'tab-' + id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Smooth scroll for nav
+function scrollTo(sel) {
+  const el = document.querySelector(sel);
+  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
   document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  // Also switch tab if needed
-  if (id !== 'overview') {
-    const tabBtn = document.querySelector(`.filter-btn[onclick*="${id}"]`);
-    if (tabBtn) switchTab(id, tabBtn);
-  }
+  event.target.classList.add('active');
 }
 
-// ── Countdown & Auto Refresh ──────────────────────────────────
-function tick() {
-  countdown--;
-  document.getElementById('countdown').textContent = countdown + 's';
-  if (countdown <= 0) {
-    countdown = REFRESH_INTERVAL;
-    refresh();
-  }
-}
-
-async function refresh() {
-  try {
-    await fetchAll();
-    document.getElementById('refreshInfo').textContent = `每${REFRESH_INTERVAL}秒自动刷新 · 实时数据`;
-  } catch (e) {
-    console.error('Refresh failed:', e);
-  }
-}
-
-// ── Init ──────────────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  document.getElementById('toTop').classList.toggle('show', window.scrollY > 400);
+// Back to top visibility
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('toTop');
+  btn.classList.toggle('show', window.scrollY > 400);
 });
 
-// First load
-refresh();
-// Countdown timer
-setInterval(tick, 1000);
+// Collapsible event cards
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.ev');
+  if (!card) return;
+  // Don't toggle if clicking a link
+  if (e.target.closest('a')) return;
+  card.classList.toggle('expanded');
+  const toggle = card.querySelector('.ev-toggle');
+  if (toggle) {
+    toggle.textContent = card.classList.contains('expanded') ? '收起详情' : '展开详情';
+  }
+});
+
+// Add toggle text to event cards
+document.querySelectorAll('.ev').forEach(card => {
+  const meta = card.querySelector('.ev-meta');
+  if (meta) {
+    const toggle = document.createElement('div');
+    toggle.className = 'ev-toggle';
+    toggle.innerHTML = '展开详情 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>';
+    meta.parentNode.insertBefore(toggle, meta.nextSibling);
+  }
+});
 </script>
 </body>
 </html>
